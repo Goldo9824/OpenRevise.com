@@ -98,7 +98,7 @@ upload() {
     (cd "$dist" && zip -q -X "$work/release.zip" -@ < "$work/names")
     echo "Archive: $(wc -l < "$work/names") files and folders, $(du -h "$work/release.zip" | cut -f1)."
 
-    sed -e "s/%%TOKEN_HASH%%/$hash/" -e "s/%%RELEASE%%/$release/" -e "s/%%APP_DIR%%/app.$DOMAIN/" \
+    sed -e "s/%%TOKEN_HASH%%/$hash/" -e "s/%%RELEASE%%/$release/" \
         "$ROOT/scripts/unpack.php" > "$work/unpack.php"
 
     echo "Uploading the archive..."

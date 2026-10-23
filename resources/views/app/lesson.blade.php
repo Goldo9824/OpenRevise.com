@@ -1,7 +1,7 @@
 @php
     $number = $outline->lessonNumber($lesson);
     $topicNumber = $outline->topicNumber($topic);
-    $saveItem = ['url' => app_url($lesson->path()), 'title' => ($number ? $number.' ' : '').$lesson->title, 'subject' => $subject->fullName()];
+    $saveItem = ['url' => main_url($lesson->path()), 'title' => ($number ? $number.' ' : '').$lesson->title, 'subject' => $subject->fullName()];
 @endphp
 <x-layouts.app page="lesson" :subject="$subject" :topic-id="$topic->id" active="subject" :lesson="$lesson->id" :title="$seo['title']" :description="$seo['description']" :canonical="$seo['canonical']" :robots="$seo['robots']" :og-type="$seo['ogType']" :json-ld="$seo['jsonLd']">
     @unless ($lesson->isPublished())
@@ -10,7 +10,7 @@
 
     <div class="with-rail" x-data x-init="$store.recent.add(@js($saveItem))">
         <article class="min-w-0">
-            <x-crumbs :items="[[$subject->name, app_url($subject->path())], [($topicNumber ? $topicNumber.'. ' : '').$topic->title, app_url($topic->path())], [($number ? $number.' ' : '').$lesson->title, null]]" />
+            <x-crumbs :items="[[$subject->name, main_url($subject->path())], [($topicNumber ? $topicNumber.'. ' : '').$topic->title, main_url($topic->path())], [($number ? $number.' ' : '').$lesson->title, null]]" />
 
             <div class="mt-4 flex items-start justify-between gap-4">
                 <h1 class="page-title">@if ($number)<span>{{ $number }}</span> @endif{{ $doc->title ?? $lesson->title }}</h1>
@@ -44,20 +44,20 @@
                         <h2 id="practise" class="text-base">Test yourself on this lesson</h2>
                         <p class="text-sm text-body mt-1">{{ $questionCount }} exam {{ Str::plural('question', $questionCount) }} &middot; {{ $questionMarks }} marks &middot; with mark schemes and model answers</p>
                     </div>
-                    <a href="{{ app_url($lesson->questionsPath()) }}" class="btn shrink-0">Start questions <x-glyph name="arrow-right" /></a>
+                    <a href="{{ main_url($lesson->questionsPath()) }}" class="btn shrink-0">Start questions <x-glyph name="arrow-right" /></a>
                 </section>
             @endif
 
             <nav class="mt-10 flex flex-wrap items-center justify-between gap-3 no-print" aria-label="Previous and next lesson">
                 @if ($previous)
-                    <a href="{{ app_url($previous->path()) }}" class="btn btn-outline max-w-full">
+                    <a href="{{ main_url($previous->path()) }}" class="btn btn-outline max-w-full">
                         <x-glyph name="arrow-left" /> <span class="truncate">{{ $outline->lessonNumber($previous) }} {{ $previous->title }}</span>
                     </a>
                 @else
                     <span></span>
                 @endif
                 @if ($next)
-                    <a href="{{ app_url($next->path()) }}" class="btn max-w-full">
+                    <a href="{{ main_url($next->path()) }}" class="btn max-w-full">
                         <span class="truncate">{{ $outline->lessonNumber($next) }} {{ $next->title }}</span> <x-glyph name="arrow-right" />
                     </a>
                 @endif
@@ -97,24 +97,24 @@
                 <div class="rail-card">
                     <p class="rail-title">Related resources</p>
                     @if ($questionCount)
-                        <a href="{{ app_url($lesson->questionsPath()) }}" class="rail-link">
+                        <a href="{{ main_url($lesson->questionsPath()) }}" class="rail-link">
                             <span class="rail-icon"><x-glyph name="help-circle" /></span>
                             <span><span class="rail-link-title">Exam questions</span><span class="rail-link-meta">{{ $questionCount }} {{ Str::plural('question', $questionCount) }} &middot; {{ $questionMarks }} marks</span></span>
                         </a>
                     @endif
                     @if ($outline->mockExams)
-                        <a href="{{ app_url($subject->path().'mock-exams/') }}" class="rail-link">
+                        <a href="{{ main_url($subject->path().'mock-exams/') }}" class="rail-link">
                             <span class="rail-icon"><x-glyph name="clipboard-list" /></span>
                             <span><span class="rail-link-title">{{ $subject->name }} mock exams</span><span class="rail-link-meta">{{ $outline->mockExams }} {{ Str::plural('paper', $outline->mockExams) }}</span></span>
                         </a>
                     @endif
                     @if ($next)
-                        <a href="{{ app_url($next->path()) }}" class="rail-link">
+                        <a href="{{ main_url($next->path()) }}" class="rail-link">
                             <span class="rail-icon"><x-glyph name="arrow-right" /></span>
                             <span><span class="rail-link-title">Next: {{ $next->title }}</span><span class="rail-link-meta">Lesson {{ $outline->lessonNumber($next) }}</span></span>
                         </a>
                     @endif
-                    <a href="{{ app_url($topic->path()) }}" class="rail-link">
+                    <a href="{{ main_url($topic->path()) }}" class="rail-link">
                         <span class="rail-icon"><x-glyph name="layers" /></span>
                         <span><span class="rail-link-title">All of {{ $topic->title }}</span><span class="rail-link-meta">Topic {{ $topicNumber }}</span></span>
                     </a>

@@ -1,7 +1,8 @@
 /*
- | OpenRevise - shared styles for openrevise.com, app.openrevise.com and the
- | API reference. A calm, bright study layout: white pages, deep green for
- | anything you can act on, a soft green tint for what is selected or key.
+ | OpenRevise - shared styles for openrevise.com (the presentation pages and
+ | the app) and the API reference. A calm, bright study layout: white pages,
+ | deep green for anything you can act on, a soft green tint for what is
+ | selected or key.
  */
 
 @import 'tailwindcss';

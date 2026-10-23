@@ -1,4 +1,6 @@
-# app.openrevise.com - served from its own folder in the hosting space.
+# app.openrevise.com - the revision app moved to openrevise.com. This folder
+# only sends old links there, to the same address, with a permanent redirect.
+# Apache answers on its own: no PHP, so nothing here can loop.
 
 <IfModule mod_negotiation.c>
     Options -MultiViews -Indexes
@@ -12,26 +14,10 @@
     RewriteCond %{HTTP_HOST} !^app\. [NC]
     RewriteRule ^ - [R=404,L]
 
-    # Force HTTPS.
-    RewriteCond %{HTTPS} !=on
-    RewriteCond %{HTTP:X-Forwarded-Proto} !=https
-    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+    # SSL certificate checks are answered here, never redirected.
+    RewriteRule ^\.well-known/ - [L]
 
-    # Hidden files are never served.
-    RewriteRule (^|/)\.(?!well-known/) - [F,L]
-
-    # Handle Authorization Header
-    RewriteCond %{HTTP:Authorization} .
-    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
-
-    # Send requests to the front controller.
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.php [L]
-</IfModule>
-
-<IfModule mod_headers.c>
-    <FilesMatch "\.(css|js|woff2|svg|png|webp|jpg|ico)$">
-        Header set Cache-Control "public, max-age=31536000, immutable"
-    </FilesMatch>
+    # app.openrevise.com/gcse/biology/ -> https://openrevise.com/gcse/biology/
+    RewriteCond %{HTTP_HOST} ^app\.([^:]+) [NC]
+    RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 </IfModule>

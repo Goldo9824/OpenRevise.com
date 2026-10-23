@@ -27,8 +27,8 @@ class DocsController extends Controller
     protected function source(): string
     {
         return str_replace(
-            ['{{api}}', '{{app}}'],
-            [rtrim(api_url('/'), '/'), rtrim(app_url('/'), '/')],
+            ['{{api}}', '{{site}}'],
+            [rtrim(api_url('/'), '/'), rtrim(main_url('/'), '/')],
             (string) file_get_contents(resource_path('docs/api.md')),
         );
     }

@@ -55,11 +55,6 @@ abstract class TestCase extends BaseTestCase
         return $this->createTestResponse($response, $request);
     }
 
-    protected function appUrl(string $path = '/'): string
-    {
-        return 'http://app.openrevise.test'.$path;
-    }
-
     protected function apiUrl(string $path = '/'): string
     {
         return 'http://api.openrevise.test'.$path;

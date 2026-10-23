@@ -1,4 +1,4 @@
-{{-- app.openrevise.com: top bar, subject sidebar and the page. --}}
+{{-- The revision app: top bar, subject sidebar and the page. --}}
 @props([
     'title' => 'OpenRevise',
     'description' => null,
@@ -32,12 +32,12 @@
                 <x-glyph name="x" x-cloak x-show="$store.ui.menu" />
             </button>
             <div class="lg:w-[15.5rem] lg:pl-6 shrink-0">
-                <x-logo :href="app_url('/')" />
+                <x-logo :href="main_url('/revise/')" />
             </div>
             <div class="flex-1 min-w-0 flex justify-end sm:justify-start lg:pl-9">
                 @include('app.partials.search')
             </div>
-            <a href="{{ app_url('/saved/') }}" class="icon-btn lg:mr-6" aria-label="Saved lessons" title="Saved lessons">
+            <a href="{{ main_url('/saved/') }}" class="icon-btn lg:mr-6" aria-label="Saved lessons" title="Saved lessons">
                 <x-glyph name="bookmark" />
                 <span class="count-dot" x-cloak x-show="$store.saved.items.length" x-text="$store.saved.items.length"></span>
             </a>

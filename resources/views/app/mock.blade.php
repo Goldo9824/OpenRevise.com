@@ -34,7 +34,7 @@
         </div>
 
         <div x-show="stage === 'cover'">
-            <x-crumbs :items="[[$subject->name, app_url($subject->path())], ['Mock exams', app_url($subject->path().'mock-exams/')], [$exam->title, null]]" />
+            <x-crumbs :items="[[$subject->name, main_url($subject->path())], ['Mock exams', main_url($subject->path().'mock-exams/')], [$exam->title, null]]" />
         </div>
 
         {{-- The front cover. --}}

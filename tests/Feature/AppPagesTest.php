@@ -23,22 +23,22 @@ class AppPagesTest extends TestCase
         $lesson = $this->makeLesson();
         $lesson->questions()->create(['type' => 'short-answer', 'question' => 'Name it.', 'marks' => 2, 'mark_scheme' => 'nucleus', 'model_answer' => 'The nucleus.']);
 
-        $this->visit($this->appUrl('/'))->assertOk()->assertSee('What are you revising?')->assertSee('Biology');
-        $this->visit($this->appUrl('/gcse/'))->assertOk()->assertSee('GCSE subjects');
-        $this->visit($this->appUrl('/gcse/biology/'))->assertOk()->assertSee('1. Cell biology')->assertSee('1.1');
-        $this->visit($this->appUrl('/gcse/biology/aqa/'))->assertOk()->assertSee('AQA GCSE Biology')->assertSee('Specification 8461');
-        $this->visit($this->appUrl('/gcse/biology/cell-biology/'))->assertOk()->assertSee('Cell structure');
-        $this->visit($this->appUrl('/gcse/biology/cell-biology/cell-structure/'))->assertOk()->assertSee($lesson->title);
+        $this->visit($this->mainUrl('/revise/'))->assertOk()->assertSee('What are you revising?')->assertSee('Biology');
+        $this->visit($this->mainUrl('/gcse/'))->assertOk()->assertSee('GCSE subjects');
+        $this->visit($this->mainUrl('/gcse/biology/'))->assertOk()->assertSee('1. Cell biology')->assertSee('1.1');
+        $this->visit($this->mainUrl('/gcse/biology/aqa/'))->assertOk()->assertSee('AQA GCSE Biology')->assertSee('Specification 8461');
+        $this->visit($this->mainUrl('/gcse/biology/cell-biology/'))->assertOk()->assertSee('Cell structure');
+        $this->visit($this->mainUrl('/gcse/biology/cell-biology/cell-structure/'))->assertOk()->assertSee($lesson->title);
 
-        $this->visit($this->appUrl($lesson->path()))
+        $this->visit($this->mainUrl($lesson->path()))
             ->assertOk()
-            ->assertSee('<link rel="canonical" href="http://app.openrevise.test/gcse/biology/cell-biology/cell-structure/eukaryotic-and-prokaryotic-cells/">', false)
+            ->assertSee('<link rel="canonical" href="http://openrevise.test/gcse/biology/cell-biology/cell-structure/eukaryotic-and-prokaryotic-cells/">', false)
             ->assertSee('"@type":"LearningResource"', false)
             ->assertSee('"@type":"BreadcrumbList"', false)
             ->assertSee('Key terms')
             ->assertSee('Exam questions');
 
-        $this->visit($this->appUrl($lesson->questionsPath()))
+        $this->visit($this->mainUrl($lesson->questionsPath()))
             ->assertOk()
             ->assertSee('Name it.')
             ->assertSee('[2 marks]')
@@ -47,16 +47,32 @@ class AppPagesTest extends TestCase
 
     public function test_addresses_get_a_trailing_slash(): void
     {
-        $this->visit($this->appUrl('/gcse/biology'))->assertStatus(301)->assertRedirect($this->appUrl('/gcse/biology/'));
+        $this->visit($this->mainUrl('/gcse/biology'))->assertStatus(301)->assertRedirect($this->mainUrl('/gcse/biology/'));
+    }
+
+    public function test_the_old_app_subdomain_redirects_to_the_same_address(): void
+    {
+        $lesson = $this->makeLesson();
+
+        $this->visit('http://app.openrevise.test'.$lesson->path())
+            ->assertStatus(301)
+            ->assertRedirect($this->mainUrl($lesson->path()));
+        $this->visit('http://app.openrevise.test/search/?q=cell')->assertRedirect($this->mainUrl('/search/?q=cell'));
+        $this->visit('http://app.openrevise.test/')->assertRedirect($this->mainUrl('/'));
+    }
+
+    public function test_missing_app_pages_keep_the_app_layout(): void
+    {
+        $this->visit($this->mainUrl('/gcse/biology/nope/'))->assertNotFound()->assertSee('We can')->assertSee('class="sidebar"', false);
     }
 
     public function test_drafts_are_hidden_but_can_be_previewed(): void
     {
         $lesson = $this->makeLesson(['status' => Status::Draft->value]);
 
-        $this->visit($this->appUrl($lesson->path()))->assertNotFound();
+        $this->visit($this->mainUrl($lesson->path()))->assertNotFound();
         $this->visit(Preview::url($lesson))->assertOk()->assertSee('Preview: this lesson is a draft')->assertSee('noindex', false);
-        $this->visit($this->appUrl($lesson->path()).'?preview=nope')->assertNotFound();
+        $this->visit($this->mainUrl($lesson->path()).'?preview=nope')->assertNotFound();
     }
 
     public function test_a_moved_topic_redirects_every_page_under_it(): void
@@ -66,9 +82,9 @@ class AppPagesTest extends TestCase
 
         $this->topic->update(['slug' => 'cells']);
 
-        $this->visit($this->appUrl($old))
+        $this->visit($this->mainUrl($old))
             ->assertStatus(301)
-            ->assertRedirect($this->appUrl('/gcse/biology/cells/cell-structure/eukaryotic-and-prokaryotic-cells/'));
+            ->assertRedirect($this->mainUrl('/gcse/biology/cells/cell-structure/eukaryotic-and-prokaryotic-cells/'));
     }
 
     public function test_topic_slugs_cannot_take_a_board_name(): void
@@ -83,33 +99,35 @@ class AppPagesTest extends TestCase
         $published = $this->makeLesson();
         $draft = $this->makeLesson(['title' => 'Secret draft', 'status' => 'draft']);
 
-        $this->visit($this->appUrl('/sitemap.xml'))
+        $this->visit($this->mainUrl('/sitemap.xml'))
             ->assertOk()
-            ->assertSee($this->appUrl($published->path()))
+            ->assertSee('<loc>'.$this->mainUrl('/about/').'</loc>', false)
+            ->assertSee('<loc>'.$this->mainUrl('/revise/').'</loc>', false)
+            ->assertSee($this->mainUrl($published->path()))
             ->assertDontSee($draft->slug);
 
-        $this->visit($this->appUrl('/robots.txt'))->assertOk()->assertSee('Sitemap: http://app.openrevise.test/sitemap.xml');
+        $this->visit($this->mainUrl('/robots.txt'))->assertOk()->assertSee('Sitemap: http://openrevise.test/sitemap.xml');
     }
 
     public function test_search_finds_lessons(): void
     {
         $this->makeLesson();
 
-        $this->getJson($this->appUrl('/_search?q=prokaryotic'))
+        $this->getJson($this->mainUrl('/_search?q=prokaryotic'))
             ->assertOk()
             ->assertJsonPath('results.0.type', 'Lesson')
             ->assertJsonPath('results.0.title', 'Eukaryotic and prokaryotic cells');
 
-        $this->visit($this->appUrl('/search/?q=cell'))->assertOk()->assertSee('Cell biology');
+        $this->visit($this->mainUrl('/search/?q=cell'))->assertOk()->assertSee('Cell biology');
     }
 
     public function test_students_can_report_a_mistake(): void
     {
         $lesson = $this->makeLesson();
 
-        $this->postJson($this->appUrl('/_report'), ['message' => 'The units are wrong.', 'lesson_id' => $lesson->id, 'page' => $this->appUrl($lesson->path())], ['Origin' => 'http://app.openrevise.test'])
+        $this->postJson($this->mainUrl('/_report'), ['message' => 'The units are wrong.', 'lesson_id' => $lesson->id, 'page' => $this->mainUrl($lesson->path())], ['Origin' => 'http://openrevise.test'])
             ->assertCreated();
-        $this->postJson($this->appUrl('/_report'), ['message' => 'Spam from elsewhere', 'page' => 'x'], ['Origin' => 'http://evil.test'])
+        $this->postJson($this->mainUrl('/_report'), ['message' => 'Spam from elsewhere', 'page' => 'x'], ['Origin' => 'http://evil.test'])
             ->assertForbidden();
 
         $this->assertSame(1, Report::count());
@@ -119,7 +137,7 @@ class AppPagesTest extends TestCase
     {
         $this->makeLesson();
 
-        $response = $this->visit($this->appUrl('/gcse/biology/'));
+        $response = $this->visit($this->mainUrl('/gcse/biology/'));
 
         $this->assertSame([], $response->headers->getCookies());
     }

@@ -8,13 +8,18 @@ use App\Models\Content\Subject;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
 
-/** sitemap.xml, built from the content and cached for an hour. */
+/**
+ * sitemap.xml for openrevise.com: the presentation pages, then the app's
+ * pages built from the content. Cached for an hour.
+ */
 class SitemapController extends Controller
 {
-    public function app(): Response
+    public function __invoke(): Response
     {
-        $xml = Cache::remember('sitemap.app', 3600, function () {
-            $urls = [[app_url('/'), null]];
+        $xml = Cache::remember('sitemap', 3600, function () {
+            $urls = collect(['/', '/about/', '/contact/', '/privacy/', '/terms/', '/revise/'])
+                ->map(fn ($path) => [main_url($path), null])
+                ->all();
 
             $subjects = Subject::visible()->ordered()->with([
                 'boards',
@@ -31,29 +36,29 @@ class SitemapController extends Controller
                     continue;
                 }
 
-                $urls[] = [app_url($subject->path()), $lessons->max('updated_at')];
+                $urls[] = [main_url($subject->path()), $lessons->max('updated_at')];
 
                 foreach ($subject->boards as $board) {
-                    $urls[] = [app_url($subject->path().$board->slug.'/'), null];
+                    $urls[] = [main_url($subject->path().$board->slug.'/'), null];
                 }
 
                 foreach ($subject->topics as $topic) {
                     if ($topic->chapters->flatMap->lessons->isEmpty()) {
                         continue;
                     }
-                    $urls[] = [app_url($topic->path()), null];
+                    $urls[] = [main_url($topic->path()), null];
 
                     foreach ($topic->chapters as $chapter) {
                         if ($chapter->lessons->isEmpty()) {
                             continue;
                         }
-                        $urls[] = [app_url($chapter->path()), null];
+                        $urls[] = [main_url($chapter->path()), null];
 
                         foreach ($chapter->lessons as $lesson) {
                             $lesson->setRelation('chapter', $chapter->setRelation('topic', $topic->setRelation('subject', $subject)));
-                            $urls[] = [app_url($lesson->path()), $lesson->updated_at];
+                            $urls[] = [main_url($lesson->path()), $lesson->updated_at];
                             if ($lesson->questions_count) {
-                                $urls[] = [app_url($lesson->questionsPath()), $lesson->updated_at];
+                                $urls[] = [main_url($lesson->questionsPath()), $lesson->updated_at];
                             }
                         }
                     }
@@ -61,10 +66,10 @@ class SitemapController extends Controller
 
                 $mocks = MockExam::visible()->where('subject_id', $subject->id)->get();
                 if ($mocks->isNotEmpty()) {
-                    $urls[] = [app_url($subject->path().'mock-exams/'), null];
+                    $urls[] = [main_url($subject->path().'mock-exams/'), null];
                     foreach ($mocks as $mock) {
                         $mock->setRelation('subject', $subject);
-                        $urls[] = [app_url($mock->path()), $mock->updated_at];
+                        $urls[] = [main_url($mock->path()), $mock->updated_at];
                     }
                 }
             }
@@ -73,10 +78,5 @@ class SitemapController extends Controller
         });
 
         return response($xml, 200, ['Content-Type' => 'application/xml; charset=UTF-8']);
-    }
-
-    public function robots(): Response
-    {
-        return response("User-agent: *\nAllow: /\n\nSitemap: ".app_url('/sitemap.xml')."\n", 200, ['Content-Type' => 'text/plain']);
     }
 }

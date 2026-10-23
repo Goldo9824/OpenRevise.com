@@ -162,7 +162,7 @@ class Reports
 
         return $top->map(fn ($r) => [
             'label' => $lessons[$r['lesson_id']]->title ?? 'Deleted lesson #'.$r['lesson_id'],
-            'url' => isset($lessons[$r['lesson_id']]) ? app_url($lessons[$r['lesson_id']]->path()) : null,
+            'url' => isset($lessons[$r['lesson_id']]) ? main_url($lessons[$r['lesson_id']]->path()) : null,
             'views' => (int) $r['views'],
             'visitors' => (int) $r['visitors'],
             'avg_seconds' => $r['duration_samples'] ? (int) round($r['duration_ms'] / $r['duration_samples'] / 1000) : null,

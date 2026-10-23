@@ -36,7 +36,7 @@ class HomeController extends Controller
             'seo' => [
                 'title' => 'GCSE revision notes, exam questions and mock exams | OpenRevise',
                 'description' => 'Free GCSE revision for AQA, Edexcel and OCR: notes for every topic, exam questions with mark schemes after every lesson, and mock exams. No sign-up.',
-                'canonical' => app_url('/'),
+                'canonical' => main_url('/revise/'),
                 'jsonLd' => [Seo::website()],
             ],
         ]);
@@ -53,8 +53,8 @@ class HomeController extends Controller
             'seo' => [
                 'title' => Seo::title('GCSE subjects'),
                 'description' => 'Every GCSE subject on OpenRevise, with its topics: free notes, exam questions and mock exams for AQA, Edexcel and OCR.',
-                'canonical' => app_url('/gcse/'),
-                'jsonLd' => [Seo::breadcrumbs([['Home', app_url('/')], ['Subjects', app_url('/gcse/')]])],
+                'canonical' => main_url('/gcse/'),
+                'jsonLd' => [Seo::breadcrumbs([['Home', main_url('/revise/')], ['Subjects', main_url('/gcse/')]])],
             ],
         ]);
     }
@@ -66,7 +66,7 @@ class HomeController extends Controller
             'seo' => [
                 'title' => Seo::title('Saved lessons'),
                 'description' => 'Lessons you saved on this device.',
-                'canonical' => app_url('/saved/'),
+                'canonical' => main_url('/saved/'),
                 'robots' => 'noindex, follow',
             ],
         ]);

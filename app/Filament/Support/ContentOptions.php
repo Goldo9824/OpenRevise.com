@@ -91,7 +91,7 @@ class ContentOptions
             ->label(fn (Model $record) => ($record->status ?? null) === Status::Published ? 'View on site' : 'Preview')
             ->icon(Heroicon::OutlinedArrowTopRightOnSquare)
             ->color('gray')
-            ->url(fn (Model $record) => ($record->status ?? null) === Status::Published ? app_url($record->path()) : Preview::url($record))
+            ->url(fn (Model $record) => ($record->status ?? null) === Status::Published ? main_url($record->path()) : Preview::url($record))
             ->openUrlInNewTab();
     }
 }

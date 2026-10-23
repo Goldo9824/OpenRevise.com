@@ -1,7 +1,7 @@
 <x-layouts.app page="search" :title="$seo['title']" :description="$seo['description']" :canonical="$seo['canonical']" :robots="$seo['robots']">
     <div class="max-w-3xl">
         <h1 class="page-title">Search</h1>
-        <form action="{{ app_url('/search/') }}" method="get" role="search" class="search !max-w-none mt-4">
+        <form action="{{ main_url('/search/') }}" method="get" role="search" class="search !max-w-none mt-4">
             <x-glyph name="search" />
             <label for="search-page" class="sr-only">Search for a topic, subject or lesson</label>
             <input id="search-page" type="search" name="q" value="{{ $q }}" placeholder="Search for a topic, subject or lesson..." autofocus>
@@ -25,7 +25,7 @@
                     @endforeach
                 </div>
             @else
-                <p class="mt-3 text-body">Try a shorter word, or <a href="{{ app_url('/gcse/') }}">browse the subjects</a>.</p>
+                <p class="mt-3 text-body">Try a shorter word, or <a href="{{ main_url('/gcse/') }}">browse the subjects</a>.</p>
             @endif
         @endif
     </div>

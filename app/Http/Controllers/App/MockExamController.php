@@ -24,7 +24,7 @@ class MockExamController extends Controller
             ->get()
             ->groupBy(fn (MockExam $e) => $e->board->name);
 
-        $url = app_url($subject->path().'mock-exams/');
+        $url = main_url($subject->path().'mock-exams/');
 
         return view('app.mock-index', [
             'subject' => $subject,
@@ -34,8 +34,8 @@ class MockExamController extends Controller
                 'description' => "Free {$subject->fullName()} mock exams for ".$subject->boards->pluck('name')->join(', ', ' and ').': timed papers on screen, with mark schemes to mark your own answers.',
                 'canonical' => $url,
                 'jsonLd' => [Seo::breadcrumbs([
-                    ['Subjects', app_url('/')],
-                    [$subject->fullName(), app_url($subject->path())],
+                    ['Subjects', main_url('/revise/')],
+                    [$subject->fullName(), main_url($subject->path())],
                     ['Mock exams', $url],
                 ])],
             ],
@@ -70,7 +70,7 @@ class MockExamController extends Controller
             ];
         });
 
-        $url = app_url($exam->path());
+        $url = main_url($exam->path());
 
         return view('app.mock', [
             'subject' => $subject,
@@ -84,9 +84,9 @@ class MockExamController extends Controller
                 'canonical' => $url,
                 'robots' => $live ? 'index, follow' : 'noindex, nofollow',
                 'jsonLd' => [Seo::breadcrumbs([
-                    ['Subjects', app_url('/')],
-                    [$subject->fullName(), app_url($subject->path())],
-                    ['Mock exams', app_url($subject->path().'mock-exams/')],
+                    ['Subjects', main_url('/revise/')],
+                    [$subject->fullName(), main_url($subject->path())],
+                    ['Mock exams', main_url($subject->path().'mock-exams/')],
                     [$exam->title, $url],
                 ])],
             ],

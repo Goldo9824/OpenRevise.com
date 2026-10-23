@@ -45,16 +45,9 @@ class PageController extends Controller
         return $this->page('main.contact', 'Contact and corrections', 'Spotted a mistake in a lesson? How to tell us, and how to get in touch.', '/contact/');
     }
 
-    public function sitemap(): Response
-    {
-        $urls = collect(['/', '/about/', '/contact/', '/privacy/', '/terms/'])->map(fn ($p) => [main_url($p), null])->all();
-
-        return response(view('sitemap', ['urls' => $urls])->render(), 200, ['Content-Type' => 'application/xml; charset=UTF-8']);
-    }
-
     public function robots(): Response
     {
-        return response("User-agent: *\nAllow: /\n\nSitemap: ".main_url('/sitemap.xml')."\nSitemap: ".app_url('/sitemap.xml')."\n", 200, ['Content-Type' => 'text/plain']);
+        return response("User-agent: *\nAllow: /\n\nSitemap: ".main_url('/sitemap.xml')."\n", 200, ['Content-Type' => 'text/plain']);
     }
 
     protected function page(string $view, string $title, string $description, string $path): View

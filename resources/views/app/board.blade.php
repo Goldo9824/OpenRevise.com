@@ -1,7 +1,7 @@
 <x-layouts.app page="board" :subject="$subject" :board="$board->slug" active="subject" :title="$seo['title']" :description="$seo['description']" :canonical="$seo['canonical']" :json-ld="$seo['jsonLd']">
     <div class="with-rail">
         <div class="min-w-0">
-            <x-crumbs :items="[['Subjects', app_url('/gcse/')], [$subject->fullName(), app_url($subject->path())], [$board->name, null]]" />
+            <x-crumbs :items="[['Subjects', main_url('/gcse/')], [$subject->fullName(), main_url($subject->path())], [$board->name, null]]" />
             <h1 class="page-title mt-4">{{ $board->name }} {{ $subject->fullName() }}</h1>
             <p class="lead mt-2">Every lesson on the {{ $board->full_name ?: $board->name }} course, in order.@if ($specCode) Specification {{ $specCode }}.@endif</p>
             <div class="mt-4" x-show="$store.prefs.board !== '{{ $board->slug }}'">
@@ -23,7 +23,7 @@
                     <p class="rail-title">{{ $board->name }} mock exams</p>
                     @forelse ($mocks as $mock)
                         @php $mock->setRelation('subject', $subject); @endphp
-                        <a href="{{ app_url($mock->path()) }}" class="rail-link">
+                        <a href="{{ main_url($mock->path()) }}" class="rail-link">
                             <span class="rail-icon"><x-glyph name="clipboard-list" /></span>
                             <span><span class="rail-link-title">{{ $mock->title }}</span><span class="rail-link-meta">{{ $mock->paperTemplate->durationLabel() }} &middot; {{ $mock->paperTemplate->total_marks }} marks</span></span>
                         </a>

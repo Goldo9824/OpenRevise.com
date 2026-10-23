@@ -31,7 +31,7 @@ class TreeController extends ApiController
                 'slug' => $subject->slug,
                 'boards' => $subject->boards->pluck('slug')->all(),
                 'status' => $subject->status->value,
-                'url' => app_url($subject->path()),
+                'url' => main_url($subject->path()),
                 'topics' => $subject->topics->map(fn ($topic) => Presenter::topic($topic) + [
                     'chapters' => $topic->chapters->map(fn ($chapter) => Presenter::chapter($chapter) + [
                         'lessons' => $chapter->lessons->map(fn ($lesson) => Presenter::lesson($lesson))->all(),

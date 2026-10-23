@@ -5,7 +5,7 @@
 | OpenRevise
 |--------------------------------------------------------------------------
 |
-| Everything specific to OpenRevise lives here: the four hostnames the one
+| Everything specific to OpenRevise lives here: the three hostnames the one
 | codebase answers to, where lesson files and diagrams are kept on disk,
 | and the owner details the legal pages need. The installer writes the
 | matching .env values, so nothing here needs editing on the server.
@@ -14,29 +14,25 @@
 
 $main = env('OPENREVISE_DOMAIN', 'openrevise.com');
 
-$appDomain = env('OPENREVISE_APP_DOMAIN', 'app.'.$main);
-
-// On LWS each subdomain is served from a folder named after it, next to
-// openrevise-core. In the repository the app's public files live in sites/app.
-$mediaPath = env('OPENREVISE_MEDIA_PATH');
-
-if (! $mediaPath) {
-    $deployed = dirname(base_path()).DIRECTORY_SEPARATOR.$appDomain;
-    $mediaPath = is_dir($deployed)
-        ? $deployed.DIRECTORY_SEPARATOR.'media'
-        : base_path('sites/app/media');
-}
+// Diagrams go in the media folder of openrevise.com. On LWS that is the
+// hosting root, which holds openrevise-core; in the repository it is
+// sites/main. (Older installs wrote OPENREVISE_MEDIA_PATH into .env, pointing
+// at the app subdomain's folder; it is no longer read.)
+$mediaPath = basename(base_path()) === 'openrevise-core'
+    ? dirname(base_path()).DIRECTORY_SEPARATOR.'media'
+    : base_path('sites/main/media');
 
 return [
 
+    // The revision app is served by openrevise.com itself; the old
+    // app.openrevise.com only redirects there.
     'domains' => [
         'main' => $main,
-        'app' => $appDomain,
         'api' => env('OPENREVISE_API_DOMAIN', 'api.'.$main),
         'admin' => env('OPENREVISE_ADMIN_DOMAIN', 'admin.'.$main),
     ],
 
-    // Used to build absolute links between the four sites.
+    // Used to build absolute links between the three sites.
     'scheme' => env('OPENREVISE_SCHEME', 'https'),
 
     // Only set this for local development, e.g. ":8000".

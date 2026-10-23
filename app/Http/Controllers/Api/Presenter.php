@@ -23,7 +23,7 @@ class Presenter
             'slug' => $topic->slug,
             'status' => $topic->status->value,
             'position' => $topic->position,
-            'url' => app_url($topic->path()),
+            'url' => main_url($topic->path()),
         ];
     }
 
@@ -36,7 +36,7 @@ class Presenter
             'slug' => $chapter->slug,
             'status' => $chapter->status->value,
             'position' => $chapter->position,
-            'url' => app_url($chapter->path()),
+            'url' => main_url($chapter->path()),
         ];
     }
 
@@ -55,7 +55,7 @@ class Presenter
             'position' => $lesson->position,
             'word_count' => $lesson->word_count,
             'questions' => $lesson->questions_count ?? $lesson->questions()->count(),
-            'url' => app_url($lesson->path()),
+            'url' => main_url($lesson->path()),
             'updated_at' => $lesson->updated_at?->toIso8601String(),
         ];
 
@@ -112,7 +112,7 @@ class Presenter
             'question_marks' => $exam->totalMarks(),
             'questions' => $exam->questions->count(),
             'status' => $exam->status->value,
-            'url' => app_url($exam->path()),
+            'url' => main_url($exam->path()),
         ];
     }
 

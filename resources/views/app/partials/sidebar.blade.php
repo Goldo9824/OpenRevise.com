@@ -2,7 +2,7 @@
     $outline = $subject ? \App\Support\SubjectOutline::for($subject) : null;
 @endphp
 @if ($subject)
-    <a href="{{ app_url($subject->path()) }}" class="side-title">
+    <a href="{{ main_url($subject->path()) }}" class="side-title">
         <span>{{ $subject->fullName() }}</span>
         <x-glyph name="chevron-right" class="!w-4 !h-4 text-faint" />
     </a>
@@ -11,17 +11,17 @@
 @endif
 
 <nav class="space-y-0.5" aria-label="Revision">
-    <a href="{{ app_url('/') }}" @class(['side-link', 'is-active' => $active === 'home'])><x-glyph name="home" /> Home</a>
-    <a href="{{ app_url('/gcse/') }}" @class(['side-link', 'is-active' => $active === 'subjects'])><x-glyph name="book-open" /> Subjects</a>
+    <a href="{{ main_url('/revise/') }}" @class(['side-link', 'is-active' => $active === 'home'])><x-glyph name="home" /> Home</a>
+    <a href="{{ main_url('/gcse/') }}" @class(['side-link', 'is-active' => $active === 'subjects'])><x-glyph name="book-open" /> Subjects</a>
 
     @if ($subject)
-        <a href="{{ app_url($subject->path()) }}" @class(['side-link', 'is-active' => $active === 'subject'])>
+        <a href="{{ main_url($subject->path()) }}" @class(['side-link', 'is-active' => $active === 'subject'])>
             <x-glyph :name="$subject->iconName()" /> {{ $subject->name }}
         </a>
         @if ($outline->topics->isNotEmpty())
             <div class="py-1 space-y-0.5">
                 @foreach ($outline->topics as $topic)
-                    <a href="{{ app_url($topic->path()) }}" @class(['side-sub', 'is-active' => $topicId === $topic->id]) title="{{ $topic->title }}">{{ $outline->topicNumber($topic) }}. {{ $topic->title }}</a>
+                    <a href="{{ main_url($topic->path()) }}" @class(['side-sub', 'is-active' => $topicId === $topic->id]) title="{{ $topic->title }}">{{ $outline->topicNumber($topic) }}. {{ $topic->title }}</a>
                 @endforeach
             </div>
         @endif
@@ -30,14 +30,14 @@
 
 <nav class="mt-5 pt-4 border-t border-line space-y-0.5" aria-label="More">
     @if ($subject)
-        <a href="{{ app_url($subject->path().'mock-exams/') }}" @class(['side-link', 'is-active' => $active === 'mocks'])>
+        <a href="{{ main_url($subject->path().'mock-exams/') }}" @class(['side-link', 'is-active' => $active === 'mocks'])>
             <x-glyph name="clipboard-list" /> Mock exams
             @if ($outline->mockExams)
                 <span class="ml-auto chip">{{ $outline->mockExams }}</span>
             @endif
         </a>
     @endif
-    <a href="{{ app_url('/saved/') }}" @class(['side-link', 'is-active' => $active === 'saved'])>
+    <a href="{{ main_url('/saved/') }}" @class(['side-link', 'is-active' => $active === 'saved'])>
         <x-glyph name="bookmark" /> Saved
         <span class="ml-auto chip" x-cloak x-show="$store.saved.items.length" x-text="$store.saved.items.length"></span>
     </a>

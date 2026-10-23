@@ -8,9 +8,9 @@
         <nav aria-label="Subjects">
             <p class="section-label mb-3">Revise</p>
             <ul class="space-y-1.5">
-                <li><a href="{{ app_url('/gcse/') }}">All subjects</a></li>
+                <li><a href="{{ main_url('/gcse/') }}">All subjects</a></li>
                 @foreach (\App\Support\Navigation::footerSubjects()->take(5) as $s)
-                    <li><a href="{{ app_url($s->path()) }}">GCSE {{ $s->name }}</a></li>
+                    <li><a href="{{ main_url($s->path()) }}">GCSE {{ $s->name }}</a></li>
                 @endforeach
             </ul>
         </nav>
