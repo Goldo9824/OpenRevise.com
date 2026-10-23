@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * For openrevise.com and app.openrevise.com: no session, no cookies, a
- * trailing slash on every page address, and sensible headers.
+ * For openrevise.com (the presentation pages and the app): no session, no
+ * cookies, a trailing slash on every page address, and sensible headers.
  */
 class PublicPage
 {

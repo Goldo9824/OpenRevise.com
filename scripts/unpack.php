@@ -21,7 +21,7 @@
 
 const TOKEN_HASH = '%%TOKEN_HASH%%';
 const RELEASE = '%%RELEASE%%';
-const KEEP = ['.well-known', 'openrevise-core/.env', 'openrevise-core/storage', '%%APP_DIR%%/media'];
+const KEEP = ['.well-known', 'openrevise-core/.env', 'openrevise-core/storage', 'media'];
 const SECONDS_PER_CALL = 15;
 const LIFETIME = 7200;
 

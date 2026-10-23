@@ -1,4 +1,4 @@
-{{-- openrevise.com: the presentation pages. --}}
+{{-- The presentation pages: landing, About, Privacy, Terms, Contact. --}}
 @props([
     'title' => 'OpenRevise',
     'description' => null,
@@ -11,12 +11,12 @@
 @php
     $subjects = \App\Support\Navigation::footerSubjects();
     $menus = [
-        'Subjects' => $subjects->map(fn ($s) => [$s->iconName(), 'GCSE '.$s->name, null, app_url($s->path())])->push(['book-open', 'All subjects', 'Every subject and topic', app_url('/gcse/')])->all(),
+        'Subjects' => $subjects->map(fn ($s) => [$s->iconName(), 'GCSE '.$s->name, null, main_url($s->path())])->push(['book-open', 'All subjects', 'Every subject and topic', main_url('/gcse/')])->all(),
         'Study tools' => [
-            ['file-text', 'Revision notes', 'Short lessons with key terms first', app_url('/gcse/')],
-            ['help-circle', 'Exam questions', 'After every lesson, with mark schemes', app_url('/gcse/')],
-            ['clipboard-list', 'Mock exams', 'Timed papers for your board', app_url('/gcse/')],
-            ['bookmark', 'Saved lessons', 'Kept on your device', app_url('/saved/')],
+            ['file-text', 'Revision notes', 'Short lessons with key terms first', main_url('/gcse/')],
+            ['help-circle', 'Exam questions', 'After every lesson, with mark schemes', main_url('/gcse/')],
+            ['clipboard-list', 'Mock exams', 'Timed papers for your board', main_url('/gcse/')],
+            ['bookmark', 'Saved lessons', 'Kept on your device', main_url('/saved/')],
         ],
         'Resources' => [
             ['help-circle', 'How lessons are written', 'Who is behind OpenRevise', main_url('/about/')],
@@ -58,8 +58,8 @@
             </nav>
 
             <div class="flex items-center gap-2">
-                <a href="{{ app_url('/search/') }}" class="icon-btn" aria-label="Search"><x-glyph name="search" /></a>
-                <a href="{{ app_url('/') }}" class="btn hidden sm:inline-flex !h-11 !px-5 !text-[.95rem]">Start revising</a>
+                <a href="{{ main_url('/search/') }}" class="icon-btn" aria-label="Search"><x-glyph name="search" /></a>
+                <a href="{{ main_url('/revise/') }}" class="btn hidden sm:inline-flex !h-11 !px-5 !text-[.95rem]">Start revising</a>
                 <button type="button" class="icon-btn lg:hidden" @click="mobile = !mobile" :aria-expanded="mobile" aria-label="Menu"><x-glyph name="menu" /></button>
             </div>
         </div>
@@ -75,7 +75,7 @@
                         @endforeach
                     </div>
                 @endforeach
-                <a href="{{ app_url('/') }}" class="btn sm:col-span-3">Start revising</a>
+                <a href="{{ main_url('/revise/') }}" class="btn sm:col-span-3">Start revising</a>
             </nav>
         </div>
     </header>

@@ -15,9 +15,10 @@ use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /*
-| One codebase, four sites. Each subdomain folder on the server holds a small
-| index.php that loads this core; Laravel then picks the routes that match
-| the hostname of the request.
+| One codebase, three sites: openrevise.com (the presentation pages and the
+| revision app), api. and admin. Each site's folder on the server holds a
+| small index.php that loads this core; Laravel then picks the routes that
+| match the hostname of the request.
 */
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -30,20 +31,19 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->middleware('api')
                 ->group(base_path('routes/api.php'));
 
-            Route::domain($domains['app'])
-                ->middleware('public')
-                ->group(base_path('routes/app.php'));
-
             Route::domain($domains['main'])
                 ->middleware('public')
-                ->group(base_path('routes/main.php'));
+                ->group([base_path('routes/main.php'), base_path('routes/app.php')]);
 
-            // www.openrevise.com goes to the bare domain.
-            Route::domain('www.'.$domains['main'])->group(function () {
-                Route::any('{any?}', fn (Request $request) => redirect()->away(
-                    main_url($request->getRequestUri()), 301
-                ))->where('any', '.*');
-            });
+            // www.openrevise.com goes to the bare domain, and so does the old
+            // app.openrevise.com, keeping the address: the app moved there.
+            foreach (['www', 'app'] as $alias) {
+                Route::domain($alias.'.'.$domains['main'])->group(function () {
+                    Route::any('{any?}', fn (Request $request) => redirect()->away(
+                        main_url($request->getRequestUri()), 301
+                    ))->where('any', '.*');
+                });
+            }
 
             // The admin panel (Filament) registers its own pages on its domain.
             Route::domain($domains['admin'])
@@ -79,9 +79,9 @@ return Application::configure(basePath: dirname(__DIR__))
         // An address that used to exist (a slug changed, a lesson moved) is
         // answered with a permanent redirect instead of a 404.
         $exceptions->render(function (NotFoundHttpException $e, Request $request) {
-            if ($request->isMethod('GET') && $request->getHost() === config('openrevise.domains.app')
+            if ($request->isMethod('GET') && $request->getHost() === config('openrevise.domains.main')
                 && ($new = SlugRedirect::resolve($request->getPathInfo()))) {
-                return redirect()->to(app_url($new), 301);
+                return redirect()->to(main_url($new), 301);
             }
         });
 

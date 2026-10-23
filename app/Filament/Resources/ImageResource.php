@@ -17,7 +17,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Number;
 
-/** Diagrams. Files go straight into the app subdomain's media folder. */
+/** Diagrams. Files go straight into openrevise.com's media folder. */
 class ImageResource extends Resource
 {
     protected static ?string $model = Image::class;

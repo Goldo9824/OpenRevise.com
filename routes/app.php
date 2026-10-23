@@ -7,13 +7,14 @@ use App\Http\Controllers\App\MockExamController;
 use App\Http\Controllers\App\ReportController;
 use App\Http\Controllers\App\SearchController;
 use App\Http\Controllers\App\SitemapController;
-use App\Http\Controllers\CollectController;
 use Illuminate\Support\Facades\Route;
 
 /*
-| app.openrevise.com - the revision app. Public, no login, rendered on the
-| server so search engines can read every page.
+| The revision app, on openrevise.com next to the presentation pages
+| (routes/main.php). Public, no login, rendered on the server so search
+| engines can read every page.
 |
+|   /revise/                                         pick a board and a subject
 |   /gcse/biology/                                   subject
 |   /gcse/biology/aqa/                               board page
 |   /gcse/biology/cell-biology/                      topic
@@ -25,10 +26,8 @@ use Illuminate\Support\Facades\Route;
 
 $level = config('openrevise.level');
 
-Route::get('/', [HomeController::class, 'index'])->name('app.home');
-Route::get('/sitemap.xml', [SitemapController::class, 'app']);
-Route::get('/robots.txt', [SitemapController::class, 'robots']);
-Route::post('/_t', CollectController::class);
+Route::get('/revise', [HomeController::class, 'index'])->name('app.home');
+Route::get('/sitemap.xml', SitemapController::class);
 Route::post('/_report', [ReportController::class, 'store']);
 Route::get('/_search', [SearchController::class, 'json']);
 Route::get('/search', [SearchController::class, 'page']);

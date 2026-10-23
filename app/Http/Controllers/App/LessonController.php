@@ -27,7 +27,7 @@ class LessonController extends Controller
         $outline = SubjectOutline::for($lesson->chapter->topic->subject);
         [$previous, $next] = $outline->neighbours($lesson);
 
-        $url = app_url($lesson->path());
+        $url = main_url($lesson->path());
         $description = $lesson->summary ?: Str::limit(trim(strip_tags($doc->html)), 155);
 
         return view('app.lesson', [
@@ -86,7 +86,7 @@ class LessonController extends Controller
             'model_answer' => $parser->parse($q->model_answer)->html,
         ]);
 
-        $url = app_url($lesson->questionsPath());
+        $url = main_url($lesson->questionsPath());
         $subjectModel = $lesson->chapter->topic->subject;
 
         return view('app.questions', [
@@ -103,11 +103,11 @@ class LessonController extends Controller
                 'robots' => $lesson->isPublished() ? 'index, follow' : 'noindex, nofollow',
                 'jsonLd' => [
                     Seo::breadcrumbs([
-                        ['Subjects', app_url('/')],
-                        [$subjectModel->fullName(), app_url($subjectModel->path())],
-                        [$lesson->chapter->topic->title, app_url($lesson->chapter->topic->path())],
-                        [$lesson->chapter->title, app_url($lesson->chapter->path())],
-                        [$lesson->title, app_url($lesson->path())],
+                        ['Subjects', main_url('/revise/')],
+                        [$subjectModel->fullName(), main_url($subjectModel->path())],
+                        [$lesson->chapter->topic->title, main_url($lesson->chapter->topic->path())],
+                        [$lesson->chapter->title, main_url($lesson->chapter->path())],
+                        [$lesson->title, main_url($lesson->path())],
                         ['Exam questions', $url],
                     ]),
                     [
@@ -165,11 +165,11 @@ class LessonController extends Controller
         $subject = $topic->subject;
 
         return Seo::breadcrumbs([
-            ['Subjects', app_url('/')],
-            [$subject->fullName(), app_url($subject->path())],
-            [$topic->title, app_url($topic->path())],
-            [$chapter->title, app_url($chapter->path())],
-            [$lesson->title, app_url($lesson->path())],
+            ['Subjects', main_url('/revise/')],
+            [$subject->fullName(), main_url($subject->path())],
+            [$topic->title, main_url($topic->path())],
+            [$chapter->title, main_url($chapter->path())],
+            [$lesson->title, main_url($lesson->path())],
         ]);
     }
 }

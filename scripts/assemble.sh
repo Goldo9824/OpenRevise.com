@@ -2,8 +2,9 @@
 #
 # Lays the built site out the way LWS serves it (see README, "Hosting layout"):
 #
-#   dist/                          hosting root = openrevise.com (+ install.php)
-#   dist/app.openrevise.com/       the revision app
+#   dist/                          hosting root = openrevise.com and the
+#                                  revision app (+ install.php, media/)
+#   dist/app.openrevise.com/       old address of the app: redirects only
 #   dist/api.openrevise.com/       the API
 #   dist/admin.openrevise.com/     the admin panel
 #   dist/openrevise-core/          the shared Laravel code (never served)
@@ -46,20 +47,24 @@ rm -f "$OUT"/openrevise-core/database/*.sqlite
 find "$OUT/openrevise-core/bootstrap/cache" -type f ! -name 'packages.php' ! -name 'services.php' ! -name '.gitignore' -delete
 rm -f "$OUT/openrevise-core/.env"
 
-# openrevise.com, served from the hosting root.
+# openrevise.com and the revision app, served from the hosting root.
 cp -a sites/main/. "$OUT/"
 cp -a public/build "$OUT/build"
 
-# The three subdomains, each in a folder named after it.
-for site in app api admin; do
+# Uploaded diagrams live on the server only; ship just the folder's rules.
+find "$OUT/media" -type f ! -name '.htaccess' -delete
+
+# The two subdomains, each in a folder named after it.
+for site in api admin; do
     dir="$OUT/$site.$DOMAIN"
     mkdir -p "$dir"
     cp -a "sites/$site/." "$dir/"
     cp -a public/build "$dir/build"
 done
 
-# Uploaded diagrams live on the server only; ship just the folder's rules.
-find "$OUT/app.$DOMAIN/media" -type f ! -name '.htaccess' -delete
+# The app's old subdomain: just the redirect to openrevise.com.
+mkdir -p "$OUT/app.$DOMAIN"
+cp -a sites/app/. "$OUT/app.$DOMAIN/"
 
 # Filament's own scripts, styles and fonts for the admin panel.
 for asset in js css fonts; do

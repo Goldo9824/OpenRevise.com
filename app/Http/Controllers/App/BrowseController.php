@@ -18,7 +18,7 @@ class BrowseController extends Controller
     {
         $subject = $this->subjectBySlug($subject);
         $outline = SubjectOutline::for($subject);
-        $url = app_url($subject->path());
+        $url = main_url($subject->path());
 
         return view('app.subject', [
             'subject' => $subject,
@@ -29,7 +29,7 @@ class BrowseController extends Controller
                     ? Str::limit(strip_tags($subject->description), 155)
                     : "Free {$subject->fullName()} revision notes, exam questions and mock exams for ".$subject->boards->pluck('name')->join(', ', ' and ').'.',
                 'canonical' => $url,
-                'jsonLd' => [Seo::breadcrumbs([['Subjects', app_url('/gcse/')], [$subject->fullName(), $url]])],
+                'jsonLd' => [Seo::breadcrumbs([['Subjects', main_url('/gcse/')], [$subject->fullName(), $url]])],
             ],
         ]);
     }
@@ -52,7 +52,7 @@ class BrowseController extends Controller
         );
 
         $mocks = $subject->mockExams()->visible()->where('board_id', $board->id)->with('paperTemplate')->orderBy('position')->get();
-        $url = app_url($subject->path().$board->slug.'/');
+        $url = main_url($subject->path().$board->slug.'/');
 
         return view('app.board', [
             'subject' => $subject,
@@ -66,8 +66,8 @@ class BrowseController extends Controller
                 'description' => "Every {$board->name} {$subject->fullName()} topic: free revision notes and exam questions with mark schemes, written for the {$board->name} specification.",
                 'canonical' => $url,
                 'jsonLd' => [Seo::breadcrumbs([
-                    ['Subjects', app_url('/gcse/')],
-                    [$subject->fullName(), app_url($subject->path())],
+                    ['Subjects', main_url('/gcse/')],
+                    [$subject->fullName(), main_url($subject->path())],
                     [$board->name, $url],
                 ])],
             ],
@@ -87,7 +87,7 @@ class BrowseController extends Controller
             $topic->load(['chapters.lessons' => fn ($l) => $l->with('boards')->withCount('questions')]);
         }
 
-        $url = app_url($topic->path());
+        $url = main_url($topic->path());
 
         return view('app.topic', [
             'subject' => $subject,
@@ -100,8 +100,8 @@ class BrowseController extends Controller
                     : "{$topic->title}: {$subject->fullName()} revision notes and exam questions, lesson by lesson.",
                 'canonical' => $url,
                 'jsonLd' => [Seo::breadcrumbs([
-                    ['Subjects', app_url('/gcse/')],
-                    [$subject->fullName(), app_url($subject->path())],
+                    ['Subjects', main_url('/gcse/')],
+                    [$subject->fullName(), main_url($subject->path())],
                     [$topic->title, $url],
                 ])],
             ],
@@ -123,7 +123,7 @@ class BrowseController extends Controller
 
         abort_if($lessons->isEmpty() && ! Preview::allows($chapter), 404);
 
-        $url = app_url($chapter->path());
+        $url = main_url($chapter->path());
 
         return view('app.chapter', [
             'subject' => $subject,
@@ -138,9 +138,9 @@ class BrowseController extends Controller
                     : "{$chapter->title} ({$topic->title}): {$lessons->count()} short {$subject->fullName()} lessons with exam questions and mark schemes.",
                 'canonical' => $url,
                 'jsonLd' => [Seo::breadcrumbs([
-                    ['Subjects', app_url('/gcse/')],
-                    [$subject->fullName(), app_url($subject->path())],
-                    [$topic->title, app_url($topic->path())],
+                    ['Subjects', main_url('/gcse/')],
+                    [$subject->fullName(), main_url($subject->path())],
+                    [$topic->title, main_url($topic->path())],
                     [$chapter->title, $url],
                 ])],
             ],

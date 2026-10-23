@@ -5,8 +5,8 @@ namespace App\Models\Content;
 use App\Content\ImageVersion;
 
 /**
- * A diagram. The file sits in the app subdomain's media folder; this row
- * holds the name used in [IMAGE] tags, its size and default alt text.
+ * A diagram. The file sits in openrevise.com's media folder; this row holds
+ * the name used in [IMAGE] tags, its size and default alt text.
  */
 class Image extends ContentModel
 {
@@ -25,7 +25,7 @@ class Image extends ContentModel
 
     public function url(): string
     {
-        return app_url('/media/'.$this->filename);
+        return main_url('/media/'.$this->filename);
     }
 
     public function filePath(): string

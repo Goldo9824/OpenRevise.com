@@ -7,8 +7,8 @@
                 <h1 class="hero-title mt-6"><span class="xl:whitespace-nowrap">Revise smarter.</span><br><span class="text-brand">Go further.</span></h1>
                 <p class="mt-7 text-lg md:text-xl text-body max-w-xl leading-relaxed">OpenRevise gives you free, high-quality GCSE revision notes, exam questions and mock exams for AQA, Edexcel and OCR. No account, nothing to pay.</p>
                 <div class="mt-9 flex flex-wrap gap-3">
-                    <a href="{{ app_url('/') }}" class="btn !h-14 !px-8 !text-base !rounded-xl">Start revising &mdash; it&rsquo;s free</a>
-                    <a href="{{ app_url('/gcse/') }}" class="btn btn-outline !h-14 !px-8 !text-base !rounded-xl !border-2">Explore subjects</a>
+                    <a href="{{ main_url('/revise/') }}" class="btn !h-14 !px-8 !text-base !rounded-xl">Start revising &mdash; it&rsquo;s free</a>
+                    <a href="{{ main_url('/gcse/') }}" class="btn btn-outline !h-14 !px-8 !text-base !rounded-xl !border-2">Explore subjects</a>
                 </div>
 
                 <ul class="mt-12 grid gap-6 sm:grid-cols-3 max-w-2xl">
@@ -106,10 +106,10 @@
             </div>
             <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
                 @foreach ([
-                    ['file-text', '#7c3aed', 'Revision notes', 'One idea per lesson, written for your board\'s specification. Key terms first, then labelled diagrams, tables and formulas.', app_url('/gcse/')],
-                    ['check-circle', '#15803d', 'Exam questions', 'Questions in your board\'s style after every lesson. Write your answer, open the mark scheme and the model answer, and mark yourself.', app_url('/gcse/')],
-                    ['clipboard-list', '#c2620f', 'Mock exams', 'Full papers with the real time and marks for your board. Sit one against the clock on screen, then see your total.', app_url('/gcse/')],
-                    ['bookmark', '#0f766e', 'Save and come back', 'Bookmark lessons, pick up where you left off and keep your answers. All stored on your own device, no account.', app_url('/saved/')],
+                    ['file-text', '#7c3aed', 'Revision notes', 'One idea per lesson, written for your board\'s specification. Key terms first, then labelled diagrams, tables and formulas.', main_url('/gcse/')],
+                    ['check-circle', '#15803d', 'Exam questions', 'Questions in your board\'s style after every lesson. Write your answer, open the mark scheme and the model answer, and mark yourself.', main_url('/gcse/')],
+                    ['clipboard-list', '#c2620f', 'Mock exams', 'Full papers with the real time and marks for your board. Sit one against the clock on screen, then see your total.', main_url('/gcse/')],
+                    ['bookmark', '#0f766e', 'Save and come back', 'Bookmark lessons, pick up where you left off and keep your answers. All stored on your own device, no account.', main_url('/saved/')],
                 ] as [$icon, $colour, $title, $text, $url])
                     <a href="{{ $url }}" class="card p-6 no-underline text-body hover:border-brand-200 hover:shadow-[0_12px_30px_-18px_rgba(15,107,86,.5)] transition-shadow">
                         <div class="flex items-center gap-4">
@@ -132,15 +132,15 @@
             <p class="mt-4 text-body text-lg">When the boards ask for the same thing there is one lesson for all of them; when they differ, each board gets its own. Not sure which board you are on? Your teacher will know, and it is on the front of your past papers.</p>
             <div class="mt-7 flex flex-wrap gap-3">
                 @forelse ($boards as $board)
-                    <a href="{{ app_url('/') }}?board={{ $board->slug }}" class="btn btn-outline !h-12 !px-6 !rounded-xl !text-base">{{ $board->name }}</a>
+                    <a href="{{ main_url('/revise/') }}?board={{ $board->slug }}" class="btn btn-outline !h-12 !px-6 !rounded-xl !text-base">{{ $board->name }}</a>
                 @empty
-                    <a href="{{ app_url('/') }}" class="btn">See all subjects</a>
+                    <a href="{{ main_url('/revise/') }}" class="btn">See all subjects</a>
                 @endforelse
             </div>
         </div>
         <div class="grid gap-3 sm:grid-cols-2">
             @foreach ($subjects as $subject)
-                <a href="{{ app_url($subject->path()) }}" class="subject-card !items-center" style="--tile: {{ $subject->coverColour() }}">
+                <a href="{{ main_url($subject->path()) }}" class="subject-card !items-center" style="--tile: {{ $subject->coverColour() }}">
                     <span class="subject-tile"><x-glyph :name="$subject->iconName()" /></span>
                     <span class="flex-1 font-semibold text-ink">GCSE {{ $subject->name }}</span>
                     <x-glyph name="chevron-right" class="!w-4 !h-4 text-faint" />
@@ -174,7 +174,7 @@
                 @endforeach
             </div>
             <div class="mt-12 text-center">
-                <a href="{{ app_url('/') }}" class="btn !h-14 !px-8 !text-base !rounded-xl">Start revising &mdash; it&rsquo;s free</a>
+                <a href="{{ main_url('/revise/') }}" class="btn !h-14 !px-8 !text-base !rounded-xl">Start revising &mdash; it&rsquo;s free</a>
             </div>
         </div>
     </section>

@@ -8,7 +8,7 @@ use Illuminate\Validation\ValidationException;
 use RuntimeException;
 
 /**
- * Saves diagrams straight into the app subdomain's media folder (no storage
+ * Saves diagrams straight into openrevise.com's media folder (no storage
  * link needed on LWS). Large photos are resized and turned into WebP.
  */
 class ImageStore

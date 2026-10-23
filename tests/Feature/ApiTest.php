@@ -68,7 +68,7 @@ class ApiTest extends TestCase
             ->assertCreated()
             ->assertJsonPath('data.slug', 'animal-and-plant-cells')
             ->assertJsonPath('data.status', 'published')
-            ->assertJsonPath('data.url', 'http://app.openrevise.test/gcse/biology/organisation/the-heart/animal-and-plant-cells/');
+            ->assertJsonPath('data.url', 'http://openrevise.test/gcse/biology/organisation/the-heart/animal-and-plant-cells/');
 
         $lesson = Lesson::where('title', 'Animal and plant cells')->first();
         $this->assertStringContainsString('[KEYTERM] Nucleus', $lesson->body());
@@ -124,7 +124,7 @@ class ApiTest extends TestCase
         $this->putJson($this->apiUrl("/v1/lessons/{$lesson->id}"), ['slug' => 'cell-types'], ['Authorization' => 'Bearer '.$this->apiKey()])
             ->assertOk()->assertJsonPath('data.slug', 'cell-types');
 
-        $this->visit($this->appUrl($old))->assertRedirect($this->appUrl('/gcse/biology/cell-biology/cell-structure/cell-types/'));
+        $this->visit($this->mainUrl($old))->assertRedirect($this->mainUrl('/gcse/biology/cell-biology/cell-structure/cell-types/'));
     }
 
     public function test_questions_are_added_to_a_lesson(): void
@@ -143,7 +143,7 @@ class ApiTest extends TestCase
             ->assertJsonPath('data.questions.1.type', 'short-answer')
             ->assertJsonPath('data.questions.1.board', 'aqa');
 
-        $this->visit($this->appUrl($lesson->questionsPath()))->assertOk()->assertSee('Name the jelly.');
+        $this->visit($this->mainUrl($lesson->questionsPath()))->assertOk()->assertSee('Name the jelly.');
     }
 
     public function test_multiple_choice_needs_a_valid_answer(): void
@@ -170,7 +170,7 @@ class ApiTest extends TestCase
             ->assertJsonPath('data.question_marks', 4)
             ->assertJsonCount(1, 'warnings');
 
-        $this->visit($this->appUrl(MockExam::first()->path()))->assertOk()->assertSee('1 hour 45 minutes');
+        $this->visit($this->mainUrl(MockExam::first()->path()))->assertOk()->assertSee('1 hour 45 minutes');
     }
 
     public function test_svg_diagrams_are_cleaned_before_saving(): void

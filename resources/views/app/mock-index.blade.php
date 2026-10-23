@@ -1,6 +1,6 @@
 <x-layouts.app page="mock-index" :subject="$subject" active="mocks" :title="$seo['title']" :description="$seo['description']" :canonical="$seo['canonical']" :json-ld="$seo['jsonLd']">
     <div class="max-w-4xl">
-        <x-crumbs :items="[[$subject->name, app_url($subject->path())], ['Mock exams', null]]" />
+        <x-crumbs :items="[[$subject->name, main_url($subject->path())], ['Mock exams', null]]" />
         <h1 class="page-title mt-4">{{ $subject->fullName() }} mock exams</h1>
         <p class="lead mt-2">Full papers written by OpenRevise, with the time and marks of the real exam for your board. Sit one on screen, timed or untimed, then mark it with the mark scheme.</p>
 
@@ -13,7 +13,7 @@
                     </div>
                     @foreach ($exams as $exam)
                         @php $exam->setRelation('subject', $subject); @endphp
-                        <a href="{{ app_url($exam->path()) }}" class="lesson-row" data-tier="{{ $exam->paperTemplate->tier === 'higher' ? 'higher' : 'all' }}" x-show="$store.prefs.shows($el.dataset)">
+                        <a href="{{ main_url($exam->path()) }}" class="lesson-row" data-tier="{{ $exam->paperTemplate->tier === 'higher' ? 'higher' : 'all' }}" x-show="$store.prefs.shows($el.dataset)">
                             <span class="rail-icon"><x-glyph name="clipboard-list" /></span>
                             <span class="flex-1 min-w-0">
                                 <span class="lesson-title">{{ $exam->title }}</span>

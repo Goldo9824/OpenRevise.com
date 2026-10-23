@@ -17,7 +17,7 @@ class Preview
 
     public static function url(Model $model): string
     {
-        return app_url($model->path()).'?preview='.static::token($model);
+        return main_url($model->path()).'?preview='.static::token($model);
     }
 
     public static function allows(Model $model): bool

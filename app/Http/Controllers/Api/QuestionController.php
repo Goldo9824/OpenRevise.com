@@ -44,7 +44,7 @@ class QuestionController extends ApiController
 
         return $this->respond([
             'lesson_id' => $lesson->id,
-            'url' => app_url($lesson->load('chapter.topic.subject')->questionsPath()),
+            'url' => main_url($lesson->load('chapter.topic.subject')->questionsPath()),
             'questions' => array_map(fn (ExamQuestion $q) => Presenter::question($q->load('board')), $created),
         ], 201);
     }

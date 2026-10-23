@@ -1,7 +1,7 @@
 @php $boardSlugs = $subject->boards->pluck('slug')->join(','); $count = $count ?? 0; @endphp
-<a href="{{ app_url($subject->path()) }}" class="subject-card" style="--tile: {{ $subject->coverColour() }}"
+<a href="{{ main_url($subject->path()) }}" class="subject-card" style="--tile: {{ $subject->coverColour() }}"
    data-boards="{{ $boardSlugs }}" x-show="!$store.prefs.board || !$el.dataset.boards || $el.dataset.boards.split(',').includes($store.prefs.board)"
-   :href="$store.prefs.board && '{{ $boardSlugs }}'.split(',').includes($store.prefs.board) ? '{{ app_url($subject->path()) }}' + $store.prefs.board + '/' : '{{ app_url($subject->path()) }}'">
+   :href="$store.prefs.board && '{{ $boardSlugs }}'.split(',').includes($store.prefs.board) ? '{{ main_url($subject->path()) }}' + $store.prefs.board + '/' : '{{ main_url($subject->path()) }}'">
     <span class="subject-tile"><x-glyph :name="$subject->iconName()" /></span>
     <span class="min-w-0">
         <span class="block font-semibold text-ink">{{ $subject->name }}</span>

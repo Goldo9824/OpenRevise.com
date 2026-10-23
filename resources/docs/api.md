@@ -21,7 +21,7 @@ A key without the publish right that asks for `published` gets a draft and a war
 
 Subject → Topic → Chapter → Lesson. Subjects and exam boards are set up by the admin; topics, chapters and lessons can be made here. Each lesson belongs to one or more boards, and has exam questions. Mock exams belong to a subject and a board.
 
-Addresses are built from slugs: `{{app}}/gcse/biology/cell-biology/cell-structure/eukaryotic-and-prokaryotic-cells/`. Slugs are made from titles; leave `slug` out unless you need a specific one. A lesson for only some of a subject's boards gets the board names at the end of its slug (`required-practical-microscopy-aqa`).
+Addresses are built from slugs: `{{site}}/gcse/biology/cell-biology/cell-structure/eukaryotic-and-prokaryotic-cells/`. Slugs are made from titles; leave `slug` out unless you need a specific one. A lesson for only some of a subject's boards gets the board names at the end of its slug (`required-practical-microscopy-aqa`).
 
 Start with `GET /v1/tree` to see what exists, and `GET /v1/boards` for board slugs and paper templates.
 

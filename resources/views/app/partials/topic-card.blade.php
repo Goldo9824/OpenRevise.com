@@ -9,7 +9,7 @@
 <section class="topic-card" data-boards="{{ $all->flatMap->boards->pluck('slug')->unique()->join(',') }}" x-show="$store.prefs.shows($el.dataset)">
     <div class="topic-head">
         <h2 class="text-base">
-            <a href="{{ app_url($topic->path()) }}" class="text-ink no-underline hover:text-brand-dark">{{ $outline->topicNumber($topic) }}. {{ $topic->title }}</a>
+            <a href="{{ main_url($topic->path()) }}" class="text-ink no-underline hover:text-brand-dark">{{ $outline->topicNumber($topic) }}. {{ $topic->title }}</a>
         </h2>
         <span class="text-xs text-muted whitespace-nowrap">{{ $all->count() }} {{ Str::plural('lesson', $all->count()) }}</span>
     </div>
@@ -17,10 +17,10 @@
         @php $lessons = $lessonsOf($chapter); @endphp
         @continue($lessons->isEmpty())
         @if ($topic->chapters->count() > 1 || ! empty($showChapter))
-            <a href="{{ app_url($chapter->path()) }}" class="chapter-label block no-underline hover:text-ink">{{ $chapter->title }}</a>
+            <a href="{{ main_url($chapter->path()) }}" class="chapter-label block no-underline hover:text-ink">{{ $chapter->title }}</a>
         @endif
         @foreach ($lessons as $lesson)
-            <a href="{{ app_url($lesson->path()) }}" class="lesson-row" data-boards="{{ $lesson->boards->pluck('slug')->join(',') }}" data-tier="{{ $lesson->tier->value }}" data-course="{{ $lesson->course->value }}" x-show="$store.prefs.shows($el.dataset)">
+            <a href="{{ main_url($lesson->path()) }}" class="lesson-row" data-boards="{{ $lesson->boards->pluck('slug')->join(',') }}" data-tier="{{ $lesson->tier->value }}" data-course="{{ $lesson->course->value }}" x-show="$store.prefs.shows($el.dataset)">
                 <span class="lesson-num">{{ $outline->lessonNumber($lesson) }}</span>
                 <span class="flex-1 min-w-0">
                     <span class="lesson-title">{{ $lesson->title }}</span>

@@ -27,8 +27,8 @@ Homestead.yaml
 Thumbs.db
 
 /database/*.sqlite
-/sites/app/media/*
-!/sites/app/media/.htaccess
+/sites/main/media/*
+!/sites/main/media/.htaccess
 /storage/install.lock
 /storage/install-key.txt
 /dist

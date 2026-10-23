@@ -11,7 +11,7 @@
 <x-layouts.app page="questions" :subject="$subject" :topic-id="$topic->id" active="subject" :lesson="$lesson->id" :title="$seo['title']" :description="$seo['description']" :canonical="$seo['canonical']" :robots="$seo['robots']" :json-ld="$seo['jsonLd']">
     <div class="with-rail" x-data="questionSet('lesson-{{ $lesson->id }}', @js($payload))">
         <article class="min-w-0">
-            <x-crumbs :items="[[$subject->name, app_url($subject->path())], [($topicNumber ? $topicNumber.'. ' : '').$topic->title, app_url($topic->path())], [($number ? $number.' ' : '').$lesson->title, app_url($lesson->path())], ['Exam questions', null]]" />
+            <x-crumbs :items="[[$subject->name, main_url($subject->path())], [($topicNumber ? $topicNumber.'. ' : '').$topic->title, main_url($topic->path())], [($number ? $number.' ' : '').$lesson->title, main_url($lesson->path())], ['Exam questions', null]]" />
 
             <h1 class="page-title mt-4">@if ($number)<span>{{ $number }}</span> @endif{{ $lesson->title }}</h1>
             <p class="lead mt-2">{{ $questionCount }} exam {{ Str::plural('question', $questionCount) }} worth {{ $payload->sum('marks') }} marks. Write your answer, open the mark scheme, then give yourself the marks you earned. Your answers are saved on this device.</p>
@@ -34,7 +34,7 @@
             </div>
 
             <div class="mt-8 flex flex-wrap items-center justify-between gap-3 no-print">
-                <a href="{{ app_url($lesson->path()) }}" class="btn btn-outline"><x-glyph name="arrow-left" /> Back to the notes</a>
+                <a href="{{ main_url($lesson->path()) }}" class="btn btn-outline"><x-glyph name="arrow-left" /> Back to the notes</a>
                 <button type="button" class="btn btn-quiet" @click="reset()"><x-glyph name="rotate" /> Clear my answers</button>
             </div>
 

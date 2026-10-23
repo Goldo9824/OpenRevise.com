@@ -206,7 +206,7 @@ function or_step_html(string $step, string $core, string $keyFile, array $errors
             $domain = $d['domain'] ?? preg_replace('/^www\./', '', strtolower(explode(':', $_SERVER['HTTP_HOST'] ?? 'openrevise.com')[0]));
 
             return $html.'<h1>Your site</h1>'
-                .$form('<label>Main domain<input name="domain" value="'.or_e($domain).'" required><small>The app, API and admin live on app., api. and admin. of this domain.</small></label>'
+                .$form('<label>Main domain<input name="domain" value="'.or_e($domain).'" required><small>The revision app is on this domain; the API and admin live on api. and admin. of it.</small></label>'
                     .'<label>Owner name<input name="owner_name" value="'.or_e($d['owner_name'] ?? '').'"><small>Shown on the About and Privacy pages as the person responsible for the site.</small></label>'
                     .'<label>Contact email<input name="contact_email" type="email" value="'.or_e($d['contact_email'] ?? '').'"><small>Shown on the Contact and Privacy pages.</small></label>', 'Continue');
 
@@ -323,7 +323,6 @@ function or_install(string $core, string $envFile, string $lockFile, string $key
 
     $existing = or_parse_env($envFile);
     $https = ! str_ends_with($d['domain'], '.localhost');
-    $mediaDir = __DIR__.'/app.'.$d['domain'].'/media';
 
     $values = [
         'APP_NAME' => 'OpenRevise',
@@ -338,7 +337,6 @@ function or_install(string $core, string $envFile, string $lockFile, string $key
         'BCRYPT_ROUNDS' => '12',
         'OPENREVISE_DOMAIN' => $d['domain'],
         'OPENREVISE_SCHEME' => $https ? 'https' : 'http',
-        'OPENREVISE_MEDIA_PATH' => is_dir(dirname($mediaDir)) ? $mediaDir : ($existing['OPENREVISE_MEDIA_PATH'] ?? ''),
         'OPENREVISE_OWNER_NAME' => $d['owner_name'] ?? '',
         'OPENREVISE_CONTACT_EMAIL' => $d['contact_email'] ?? '',
         'DB_DRIVER' => 'mysql',
@@ -378,9 +376,8 @@ function or_install(string $core, string $envFile, string $lockFile, string $key
     }
     @chmod($envFile, 0600);
 
-    if ($values['OPENREVISE_MEDIA_PATH'] !== '') {
-        @mkdir($values['OPENREVISE_MEDIA_PATH'], 0755, true);
-    }
+    // Diagrams go next to this file, in the media folder of the main domain.
+    @mkdir(__DIR__.'/media', 0755, true);
 
     // Now Laravel can start: create the tables and the admin account.
     try {
@@ -425,7 +422,7 @@ function or_done_html(array $d, string $log): string
 
     return '<h1>OpenRevise is installed</h1><p>The installer has locked itself.</p>'
         .'<ul><li>Sign in to the admin panel: <a href="'.or_e($admin).'">'.or_e($admin).'</a></li>'
-        .'<li>Students use <a href="'.or_e($scheme.'app.'.$d['domain']).'">'.or_e('app.'.$d['domain']).'</a></li>'
+        .'<li>Students use <a href="'.or_e($scheme.$d['domain']).'">'.or_e($d['domain']).'</a></li>'
         .'<li>Claude uses <a href="'.or_e($scheme.'api.'.$d['domain']).'">'.or_e('api.'.$d['domain']).'</a> with a key made in the admin panel.</li></ul>'
         .'<h2>Two last things</h2><ol><li>In the LWS panel, add a daily cron job running <code>php '.or_e(realpath(__DIR__.'/openrevise-core') ?: 'openrevise-core').'/artisan openrevise:analytics-rollup</code>. (Without it, the dashboard catches up when you open it.)</li>'
         .'<li>After a deploy that adds database changes, run <code>php artisan migrate --force</code> in the openrevise-core folder from the LWS web terminal.</li></ol>'

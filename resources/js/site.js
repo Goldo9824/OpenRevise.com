@@ -350,7 +350,7 @@ Alpine.data('reportForm', (endpoint, lessonId) => ({
     },
 }));
 
-// Links from openrevise.com carry ?board=aqa, since each site keeps its own storage.
+// Links can pick the board with ?board=aqa (the landing page's board buttons do).
 const boardParam = new URLSearchParams(location.search).get('board');
 if (boardParam && /^[a-z0-9-]{2,30}$/.test(boardParam)) {
     Alpine.store('prefs').board = boardParam;

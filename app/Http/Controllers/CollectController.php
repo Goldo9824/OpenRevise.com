@@ -51,16 +51,16 @@ class CollectController extends Controller
                 return $nothing;
             }
 
-            $domains = config('openrevise.domains');
-            $site = $request->getHost() === $domains['app'] ? 'app' : 'main';
-            [$source, $referrerHost] = Visitor::source($data['r'] ?? null, array_values($domains));
+            [$source, $referrerHost] = Visitor::source($data['r'] ?? null, array_values(config('openrevise.domains')));
             $device = Visitor::device($request->userAgent(), (int) ($data['w'] ?? 0));
 
             PageView::create([
                 'created_at' => now(),
                 'view_key' => $key,
                 'visitor' => Visitor::hash($request),
-                'site' => $site,
+                // The presentation pages and the app share openrevise.com
+                // now; page_type tells them apart.
+                'site' => 'main',
                 'path' => Str::limit($path, 490, ''),
                 'page_type' => Str::limit((string) ($data['t'] ?? ''), 28, '') ?: null,
                 'subject' => Str::limit((string) ($data['s'] ?? ''), 110, '') ?: null,

@@ -1,7 +1,8 @@
 <?php
 
 /*
-| Links between the four sites. Each builds an absolute URL from the
+| Links between the three sites (openrevise.com, which also serves the
+| revision app, the API and the admin). Each builds an absolute URL from the
 | configured hostname, so the same code works on openrevise.com and on
 | *.localhost during development.
 */
@@ -19,13 +20,6 @@ if (! function_exists('main_url')) {
     function main_url(string $path = '/'): string
     {
         return site_url('main', $path);
-    }
-}
-
-if (! function_exists('app_url')) {
-    function app_url(string $path = '/'): string
-    {
-        return site_url('app', $path);
     }
 }
 

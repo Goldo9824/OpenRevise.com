@@ -1,19 +1,19 @@
 <?php
 
 /*
-| Local development only: serves the four sites from one PHP built-in
+| Local development only: serves the three sites from one PHP built-in
 | server, choosing the folder from the hostname the way LWS does.
 |
 |   php -S 127.0.0.1:8000 dev-server.php
 |
-| then open http://openrevise.localhost:8000, http://app.openrevise.localhost:8000,
-| http://api.openrevise.localhost:8000 and http://admin.openrevise.localhost:8000
-| (*.localhost always points at your own machine).
+| then open http://openrevise.localhost:8000 (the presentation pages and the
+| app), http://api.openrevise.localhost:8000 and
+| http://admin.openrevise.localhost:8000 (*.localhost always points at your
+| own machine). The old app.openrevise.localhost redirects like on LWS.
 */
 
 $host = strtolower(explode(':', $_SERVER['HTTP_HOST'] ?? '')[0]);
 $site = match (true) {
-    str_starts_with($host, 'app.') => 'app',
     str_starts_with($host, 'api.') => 'api',
     str_starts_with($host, 'admin.') => 'admin',
     default => 'main',

@@ -36,7 +36,7 @@ class SearchController extends Controller
             'seo' => [
                 'title' => Seo::title($q !== '' ? 'Search: '.$q : 'Search'),
                 'description' => 'Search OpenRevise GCSE revision notes and exam questions.',
-                'canonical' => app_url('/search/'),
+                'canonical' => main_url('/search/'),
                 'robots' => 'noindex, follow',
             ],
         ]);
@@ -55,23 +55,23 @@ class SearchController extends Controller
         $published = fn (Builder $b) => $b->where('status', Status::Published);
 
         $subjects = Subject::query()->tap($published)->where('name', 'like', $like)->limit(5)->get()
-            ->map(fn (Subject $s) => ['title' => $s->fullName(), 'url' => app_url($s->path()), 'type' => 'Subject', 'context' => $s->boards()->pluck('name')->join(', ')]);
+            ->map(fn (Subject $s) => ['title' => $s->fullName(), 'url' => main_url($s->path()), 'type' => 'Subject', 'context' => $s->boards()->pluck('name')->join(', ')]);
 
         $topics = Topic::query()->tap($published)->where('title', 'like', $like)
             ->whereHas('subject', $published)->with('subject')->limit(8)->get()
-            ->map(fn (Topic $t) => ['title' => $t->title, 'url' => app_url($t->path()), 'type' => 'Topic', 'context' => $t->subject->fullName()]);
+            ->map(fn (Topic $t) => ['title' => $t->title, 'url' => main_url($t->path()), 'type' => 'Topic', 'context' => $t->subject->fullName()]);
 
         $chapters = Chapter::query()->tap($published)->where('title', 'like', $like)
             ->whereHas('topic', fn ($q) => $published($q)->whereHas('subject', $published))
             ->whereHas('lessons', $published)
             ->with('topic.subject')->limit(8)->get()
-            ->map(fn (Chapter $c) => ['title' => $c->title, 'url' => app_url($c->path()), 'type' => 'Chapter', 'context' => $c->topic->subject->fullName().' › '.$c->topic->title]);
+            ->map(fn (Chapter $c) => ['title' => $c->title, 'url' => main_url($c->path()), 'type' => 'Chapter', 'context' => $c->topic->subject->fullName().' › '.$c->topic->title]);
 
         $lessons = Lesson::query()->tap($published)
             ->where(fn ($w) => $w->where('title', 'like', $like)->orWhere('summary', 'like', $like))
             ->whereHas('chapter', fn ($c) => $published($c)->whereHas('topic', fn ($t) => $published($t)->whereHas('subject', $published)))
             ->with('chapter.topic.subject')->limit($limit)->get()
-            ->map(fn (Lesson $l) => ['title' => $l->title, 'url' => app_url($l->path()), 'type' => 'Lesson', 'context' => $l->chapter->topic->subject->fullName().' › '.$l->chapter->topic->title, 'summary' => $l->summary]);
+            ->map(fn (Lesson $l) => ['title' => $l->title, 'url' => main_url($l->path()), 'type' => 'Lesson', 'context' => $l->chapter->topic->subject->fullName().' › '.$l->chapter->topic->title, 'summary' => $l->summary]);
 
         $needle = Str::lower($q);
 

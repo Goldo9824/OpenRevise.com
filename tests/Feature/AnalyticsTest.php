@@ -12,7 +12,7 @@ class AnalyticsTest extends TestCase
 {
     protected function track(array $data, string $ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) Safari/604.1')
     {
-        return $this->call('POST', $this->appUrl('/_t'), [], [], [], ['HTTP_USER_AGENT' => $ua, 'CONTENT_TYPE' => 'text/plain'], json_encode($data));
+        return $this->call('POST', $this->mainUrl('/_t'), [], [], [], ['HTTP_USER_AGENT' => $ua, 'CONTENT_TYPE' => 'text/plain'], json_encode($data));
     }
 
     public function test_a_page_view_is_counted_without_cookies(): void

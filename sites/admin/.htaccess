@@ -7,6 +7,12 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
+    # LWS maps the subdomain onto this folder inside the hosting root, so
+    # without a base the rewrite to index.php below becomes
+    # /admin.openrevise.com/index.php, which Apache maps into this folder again,
+    # and loops: a 500 on every page but the home page.
+    RewriteBase /
+
     # This folder also sits inside the main site's folder; only answer on
     # the subdomain itself, never at openrevise.com/admin.openrevise.com/.
     RewriteCond %{HTTP_HOST} !^admin\. [NC]

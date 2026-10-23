@@ -20,7 +20,7 @@
             <span class="rail-icon mx-auto"><x-glyph name="bookmark" /></span>
             <p class="mt-3 font-semibold text-ink">Nothing saved yet</p>
             <p class="mt-1 text-sm text-muted">Open a lesson and press the bookmark next to its title to keep it here.</p>
-            <a href="{{ app_url('/gcse/') }}" class="btn mt-5">Browse subjects</a>
+            <a href="{{ main_url('/gcse/') }}" class="btn mt-5">Browse subjects</a>
         </div>
     </div>
 </x-layouts.app>
