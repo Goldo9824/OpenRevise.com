@@ -24,8 +24,8 @@
     <header class="topbar">
         <div class="h-full flex items-center gap-2 px-3 lg:px-0">
             <button type="button" class="icon-btn lg:hidden" @click="$store.ui.menu = !$store.ui.menu" :aria-expanded="$store.ui.menu" aria-controls="sidebar" aria-label="Menu">
-                <x-icon name="menu" x-show="!$store.ui.menu" />
-                <x-icon name="x" x-cloak x-show="$store.ui.menu" />
+                <x-glyph name="menu" x-show="!$store.ui.menu" />
+                <x-glyph name="x" x-cloak x-show="$store.ui.menu" />
             </button>
             <div class="lg:w-[15.5rem] lg:pl-6 shrink-0">
                 <x-logo :href="app_url('/')" />
@@ -34,7 +34,7 @@
                 @include('app.partials.search')
             </div>
             <a href="{{ app_url('/saved/') }}" class="icon-btn lg:mr-6" aria-label="Saved lessons" title="Saved lessons">
-                <x-icon name="bookmark" />
+                <x-glyph name="bookmark" />
                 <span class="count-dot" x-cloak x-show="$store.saved.items.length" x-text="$store.saved.items.length"></span>
             </a>
         </div>

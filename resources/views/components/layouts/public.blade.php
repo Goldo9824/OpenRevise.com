@@ -23,7 +23,7 @@
                 <a href="{{ app_url('/gcse/') }}" class="hidden sm:inline-flex px-3 py-2 rounded-lg text-sm font-medium text-body no-underline hover:bg-gray-100">Subjects</a>
                 <a href="{{ main_url('/about/') }}" class="hidden sm:inline-flex px-3 py-2 rounded-lg text-sm font-medium text-body no-underline hover:bg-gray-100">About</a>
                 <a href="{{ main_url('/contact/') }}" class="hidden md:inline-flex px-3 py-2 rounded-lg text-sm font-medium text-body no-underline hover:bg-gray-100">Contact</a>
-                <a href="{{ app_url('/') }}" class="btn btn-sm ml-2">Start revising <x-icon name="arrow-right" /></a>
+                <a href="{{ app_url('/') }}" class="btn btn-sm ml-2">Start revising <x-glyph name="arrow-right" /></a>
             </nav>
         </div>
     </header>

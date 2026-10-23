@@ -32,7 +32,7 @@
                 @if ($lesson->questions_count)
                     <span class="text-xs text-muted whitespace-nowrap hidden md:inline">{{ $lesson->questions_count }} {{ Str::plural('question', $lesson->questions_count) }}</span>
                 @endif
-                <x-icon name="chevron-right" class="!w-4 !h-4 text-faint" />
+                <x-glyph name="chevron-right" class="!w-4 !h-4 text-faint" />
             </a>
         @endforeach
     @endforeach

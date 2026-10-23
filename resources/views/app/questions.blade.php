@@ -34,8 +34,8 @@
             </div>
 
             <div class="mt-8 flex flex-wrap items-center justify-between gap-3 no-print">
-                <a href="{{ app_url($lesson->path()) }}" class="btn btn-outline"><x-icon name="arrow-left" /> Back to the notes</a>
-                <button type="button" class="btn btn-quiet" @click="reset()"><x-icon name="rotate" /> Clear my answers</button>
+                <a href="{{ app_url($lesson->path()) }}" class="btn btn-outline"><x-glyph name="arrow-left" /> Back to the notes</a>
+                <button type="button" class="btn btn-quiet" @click="reset()"><x-glyph name="rotate" /> Clear my answers</button>
             </div>
 
             <p class="mt-8 text-sm text-muted no-print xl:hidden">
@@ -66,7 +66,7 @@
                     <p class="rail-title">Found a mistake?</p>
                     <p class="text-xs text-muted leading-relaxed">Let us know so we can improve these questions.</p>
                     <button type="button" class="mt-2 inline-flex items-center gap-2 text-sm font-medium text-brand hover:underline" @click="$dispatch('open-report')">
-                        <x-icon name="flag" class="!w-4 !h-4" /> Report
+                        <x-glyph name="flag" class="!w-4 !h-4" /> Report
                     </button>
                 </div>
             </div>

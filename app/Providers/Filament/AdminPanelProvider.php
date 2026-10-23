@@ -46,7 +46,7 @@ class AdminPanelProvider extends PanelProvider
                 'gray' => Color::Stone,
             ])
             ->font(
-                'Atkinson Hyperlegible Next Variable',
+                'Inter Variable',
                 url: fn () => rescue(fn () => Vite::asset('resources/css/admin.css'), null, false),
                 provider: LocalFontProvider::class,
             )

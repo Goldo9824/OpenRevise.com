@@ -9,6 +9,7 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/css/site.css',
+                'resources/css/admin.css',
                 'resources/js/site.js',
                 'resources/js/tracker.js',
                 'resources/js/passkeys.js',

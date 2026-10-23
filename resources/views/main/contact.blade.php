@@ -1,5 +1,5 @@
 <x-layouts.page :seo="$seo" eyebrow="Contact" heading="Corrections and contact" page-name="contact">
-    <p class="text-lg text-ink-2">The quickest way to fix a mistake in a lesson is to report it from the lesson itself.</p>
+    <p class="lead !text-base">The quickest way to fix a mistake in a lesson is to report it from the lesson itself.</p>
 
     <h2>Report a mistake in a lesson</h2>
     <ol class="list-decimal pl-5 space-y-2">

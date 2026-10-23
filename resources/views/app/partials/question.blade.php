@@ -48,8 +48,8 @@
             @endforeach
             @if ($practice)
                 <p class="mt-2.5 text-sm font-medium flex items-center gap-1.5" x-cloak x-show="q({{ $id }}).choice !== null">
-                    <span x-show="q({{ $id }}).choice === @js($q->answer)" class="text-ok inline-flex items-center gap-1.5"><x-icon name="check-circle" class="!w-4 !h-4" /> Correct</span>
-                    <span x-show="q({{ $id }}).choice !== @js($q->answer)" class="text-danger inline-flex items-center gap-1.5"><x-icon name="x-circle" class="!w-4 !h-4" /> Not quite: the answer is {{ $q->answer }}</span>
+                    <span x-show="q({{ $id }}).choice === @js($q->answer)" class="text-ok inline-flex items-center gap-1.5"><x-glyph name="check-circle" class="!w-4 !h-4" /> Correct</span>
+                    <span x-show="q({{ $id }}).choice !== @js($q->answer)" class="text-danger inline-flex items-center gap-1.5"><x-glyph name="x-circle" class="!w-4 !h-4" /> Not quite: the answer is {{ $q->answer }}</span>
                 </p>
             @endif
         @else
@@ -62,20 +62,20 @@
 
         <div class="mt-3 flex flex-wrap items-center gap-2 no-print" @unless ($practice) x-show="stage === 'marking'" x-cloak @endunless>
             <button type="button" class="btn btn-outline btn-sm" @click="toggle({{ $id }}, 'scheme')" :aria-expanded="q({{ $id }}).scheme">
-                <x-icon name="eye" /> <span x-text="q({{ $id }}).scheme ? 'Hide mark scheme' : 'Mark scheme'">Mark scheme</span>
+                <x-glyph name="eye" /> <span x-text="q({{ $id }}).scheme ? 'Hide mark scheme' : 'Mark scheme'">Mark scheme</span>
             </button>
             <button type="button" class="btn btn-quiet btn-sm" @click="toggle({{ $id }}, 'model')" :aria-expanded="q({{ $id }}).model">
-                <x-icon name="file-text" /> <span x-text="q({{ $id }}).model ? 'Hide model answer' : 'Model answer'">Model answer</span>
+                <x-glyph name="file-text" /> <span x-text="q({{ $id }}).model ? 'Hide model answer' : 'Model answer'">Model answer</span>
             </button>
         </div>
 
         <div class="mt-3 space-y-2.5" x-cloak x-show="{{ $canReveal }} && (q({{ $id }}).scheme || q({{ $id }}).model)">
             <div class="reveal exam-text" x-show="q({{ $id }}).scheme">
-                <p class="reveal-title"><x-icon name="check-circle" /> Mark scheme</p>
+                <p class="reveal-title"><x-glyph name="check-circle" /> Mark scheme</p>
                 {!! $item['mark_scheme'] !!}
             </div>
             <div class="reveal model exam-text" x-show="q({{ $id }}).model">
-                <p class="reveal-title"><x-icon name="pencil" /> Model answer</p>
+                <p class="reveal-title"><x-glyph name="pencil" /> Model answer</p>
                 {!! $item['model_answer'] !!}
             </div>
         </div>

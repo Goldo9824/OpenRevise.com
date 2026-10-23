@@ -1372,6 +1372,11 @@
         color: var(--color-brand-dark);
         text-decoration: underline;
     }
+
+    .site-footer a.logo {
+        color: var(--color-brand-dark);
+        text-decoration: none;
+    }
 }
 
 /* Printing a lesson gives clean notes: no menus, no buttons. */

@@ -21,7 +21,7 @@
             <div class="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 <template x-for="item in $store.recent.items.slice(0, 3)" :key="item.url">
                     <a :href="item.url" class="card p-4 no-underline hover:border-brand-200 flex items-start gap-3">
-                        <span class="rail-icon"><x-icon name="file-text" /></span>
+                        <span class="rail-icon"><x-glyph name="file-text" /></span>
                         <span class="min-w-0">
                             <span class="block text-sm font-semibold text-ink truncate" x-text="item.title"></span>
                             <span class="block text-xs text-muted mt-0.5" x-text="item.subject"></span>
@@ -51,7 +51,7 @@
                 ['clipboard-list', 'Sit a mock exam', 'Full papers with the real time and marks for your board, timed on screen.'],
             ] as [$icon, $heading, $text])
                 <div class="card p-5">
-                    <span class="rail-icon"><x-icon :name="$icon" /></span>
+                    <span class="rail-icon"><x-glyph :name="$icon" /></span>
                     <h3 class="mt-3 text-sm">{{ $heading }}</h3>
                     <p class="mt-1 text-sm text-muted">{{ $text }}</p>
                 </div>

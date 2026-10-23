@@ -1,135 +1,117 @@
-<x-layouts.public site="main" page="landing" :title="$seo['title']" :description="$seo['description']" :canonical="$seo['canonical']" :json-ld="$seo['jsonLd']">
-    {{-- Hero: what it is, and a real piece of it. --}}
-    <section class="wrap pt-12 pb-16 md:pt-20 md:pb-24 grid gap-14 lg:grid-cols-[1.15fr_1fr] lg:items-center">
-        <div>
-            <p class="eyebrow">Free GCSE revision &middot; {{ $boards->pluck('name')->join(', ', ' and ') ?: 'AQA, Edexcel and OCR' }}</p>
-            <h1 class="mt-4 text-[2.6rem] leading-[1.02] md:text-[4rem] tracking-[-0.03em]">
-                Learn it. Answer the question. Check the <span class="hl">mark scheme</span>.
-            </h1>
-            <p class="mt-6 text-lg md:text-xl text-ink-2 max-w-xl">Short notes on every GCSE topic, exam questions after every lesson and timed mock exams, written for your exam board. No account, no sign-up, nothing to pay.</p>
-            <div class="mt-8 flex flex-wrap gap-3">
-                <a href="{{ app_url('/') }}" class="btn">Start revising <span aria-hidden="true">&rarr;</span></a>
-                <a href="#how" class="btn btn-ghost">How it works</a>
+<x-layouts.public page="landing" :title="$seo['title']" :description="$seo['description']" :canonical="$seo['canonical']" :json-ld="$seo['jsonLd']">
+    {{-- Hero: what it is, next to a real piece of a lesson. --}}
+    <section class="border-b border-line bg-gradient-to-b from-brand-50/70 to-white">
+        <div class="max-w-6xl mx-auto px-5 py-14 md:py-20 grid gap-12 lg:grid-cols-[1.05fr_1fr] lg:items-center">
+            <div>
+                <span class="chip chip-brand">Free &middot; GCSE &middot; {{ $boards->pluck('name')->join(', ', ' and ') ?: 'AQA, Edexcel and OCR' }}</span>
+                <h1 class="mt-5 text-4xl md:text-5xl font-bold tracking-tight leading-[1.08]">Revise for your GCSEs with notes, exam questions and mock papers.</h1>
+                <p class="mt-5 text-lg text-body max-w-xl">Short notes on every topic, exam questions with mark schemes after every lesson, and timed mock exams, written for your exam board. No account, no sign-up, nothing to pay.</p>
+                <div class="mt-8 flex flex-wrap gap-3">
+                    <a href="{{ app_url('/') }}" class="btn btn-lg">Start revising <x-glyph name="arrow-right" /></a>
+                    <a href="#how" class="btn btn-outline btn-lg">How it works</a>
+                </div>
             </div>
-        </div>
 
-        {{-- A specimen question, marked. --}}
-        <figure class="paper p-6 md:p-8 rotate-[.6deg] max-w-md w-full justify-self-center lg:justify-self-end" aria-label="An example exam question with its mark scheme">
-            <div class="flex items-center gap-3">
-                <x-qnum number="01.2" />
-                <span class="eyebrow">Calculation</span>
-            </div>
-            <p class="mt-4">The image of a cell is 12 mm wide. The real cell is 0.03 mm wide.</p>
-            <p class="mt-2 font-bold">Calculate the magnification.</p>
-            <div class="mt-4 ruled pt-1 font-mono text-pen text-[1.05rem] leading-8 relative" aria-hidden="true">
-                <p>12 &divide; 0.03</p>
-                <p>= 400</p>
-                <x-tick class="absolute right-16 top-0 w-7 h-7 hand-tick" />
-                <x-tick class="absolute right-16 top-8 w-7 h-7 hand-tick" />
-            </div>
-            <p class="mt-1 text-right"><span class="marks">[2 marks]</span></p>
-            <div class="reveal mt-4 text-[.95rem]">
-                <p class="reveal-title">Mark scheme</p>
-                <p>12 / 0.03 <span class="font-mono text-ink-3">(1)</span></p>
-                <p>&times;400 <span class="font-mono text-ink-3">(1)</span></p>
-            </div>
-            <figcaption class="mt-4 flex items-center justify-between text-sm text-ink-3">
-                <span>From <em>Microscopy and magnification</em></span>
-                <span class="font-mono font-bold text-red text-base border-2 border-red rounded-full px-2.5 py-0.5 -rotate-6">2/2</span>
-            </figcaption>
-        </figure>
+            {{-- A lesson, as it looks in the app. --}}
+            <figure class="card shadow-[0_24px_60px_-28px_rgba(15,107,86,.45)] overflow-hidden" aria-label="A preview of a lesson page">
+                <div class="px-5 py-3 border-b border-line flex items-center gap-2 text-xs text-muted">
+                    <span>Biology</span><x-glyph name="chevron-right" class="!w-3 !h-3" /><span>1. Cell biology</span><x-glyph name="chevron-right" class="!w-3 !h-3" /><span class="text-body">1.3 Microscopy</span>
+                </div>
+                <div class="p-5 md:p-6">
+                    <p class="text-xl font-bold text-ink">1.3 Microscopy and magnification</p>
+                    <div class="tabs mt-3 text-sm" aria-hidden="true">
+                        <span class="tab is-active"><x-glyph name="file-text" /> Notes</span>
+                        <span class="tab"><x-glyph name="help-circle" /> Exam questions <span class="tab-count">4</span></span>
+                    </div>
+                    <div class="keyterms !my-4 text-sm">
+                        <p class="keyterms-title !text-sm"><x-glyph name="lightbulb" /> Key terms</p>
+                        <ul>
+                            <li><dfn>Magnification</dfn>: how many times bigger the image is than the object.</li>
+                            <li><dfn>Resolution</dfn>: the smallest distance at which two points can be told apart.</li>
+                        </ul>
+                    </div>
+                    <div class="formula !my-4 !text-base"><span class="text-ink">magnification =
+                        <span class="inline-flex flex-col items-center align-middle mx-1 text-sm"><span class="px-1 border-b border-ink">image size</span><span>real size</span></span></span></div>
+                    <div class="flex items-center justify-between gap-3 rounded-lg bg-brand-50 border border-brand-100 px-4 py-3 text-sm">
+                        <span><span class="font-semibold text-ink">Test yourself</span> <span class="text-muted">&middot; 4 questions &middot; 6 marks</span></span>
+                        <span class="btn btn-sm">Start <x-glyph name="arrow-right" /></span>
+                    </div>
+                </div>
+            </figure>
+        </div>
     </section>
 
-    {{-- Contents page. --}}
-    <section id="how" class="border-t border-rule bg-card">
-        <div class="wrap py-16 md:py-20 grid gap-12 lg:grid-cols-[18rem_1fr]">
-            <div>
-                <p class="eyebrow">Contents</p>
-                <h2 class="mt-3 text-3xl">Everything you need, in the order you need it</h2>
-            </div>
-            <ol class="space-y-10">
-                <li>
-                    <div class="leader text-xl md:text-2xl font-bold">
-                        <span><span class="font-mono text-red mr-3">1</span>Revision notes</span>
-                        <span class="font-mono text-base text-ink-3 font-semibold">every topic</span>
-                    </div>
-                    <p class="mt-2 text-ink-2 max-w-2xl md:pl-8">One idea per lesson, written for your board's specification. Key terms are highlighted, diagrams are labelled and formulas are written out. Lessons only on the Higher tier or Separate Science say so, and can be hidden.</p>
-                </li>
-                <li>
-                    <div class="leader text-xl md:text-2xl font-bold">
-                        <span><span class="font-mono text-red mr-3">2</span>Exam questions</span>
-                        <span class="font-mono text-base text-ink-3 font-semibold">after every lesson</span>
-                    </div>
-                    <p class="mt-2 text-ink-2 max-w-2xl md:pl-8">Realistic questions in the style of your board, from one-mark recall to six-mark answers. Write your answer, open the mark scheme and the model answer, and give yourself the marks you earned.</p>
-                </li>
-                <li>
-                    <div class="leader text-xl md:text-2xl font-bold">
-                        <span><span class="font-mono text-red mr-3">3</span>Mock exams</span>
-                        <span class="font-mono text-base text-ink-3 font-semibold">timed, on screen</span>
-                    </div>
-                    <p class="mt-2 text-ink-2 max-w-2xl md:pl-8">Full papers with the same time and marks as the real thing for your board. Sit one against the clock, then mark it question by question and see your total.</p>
-                </li>
-            </ol>
+    {{-- How it works. --}}
+    <section id="how" class="max-w-6xl mx-auto px-5 py-16 md:py-20">
+        <p class="section-label">How it works</p>
+        <h2 class="mt-2 text-2xl md:text-3xl font-bold max-w-2xl">Everything for one topic in one place, in the order you need it</h2>
+        <div class="mt-8 grid gap-4 md:grid-cols-3">
+            @foreach ([
+                ['file-text', 'Revision notes', 'One idea per lesson, written for your board\'s specification. Key terms first, then labelled diagrams, tables and formulas. Higher-tier and Separate Science lessons are marked, so you can hide what is not on your course.'],
+                ['help-circle', 'Exam questions', 'Realistic questions in the style of your board after every lesson, from one-mark recall to six-mark answers. Write your answer, open the mark scheme and the model answer, and give yourself the marks.'],
+                ['clipboard-list', 'Mock exams', 'Full papers with the same time and marks as the real thing for your board. Sit one against the clock on screen, then mark it question by question and see your total.'],
+            ] as [$icon, $title, $text])
+                <div class="card p-6">
+                    <span class="rail-icon !w-10 !h-10"><x-glyph :name="$icon" /></span>
+                    <h3 class="mt-4 text-lg">{{ $title }}</h3>
+                    <p class="mt-2 text-sm text-body leading-relaxed">{{ $text }}</p>
+                </div>
+            @endforeach
         </div>
     </section>
 
     {{-- Boards and subjects. --}}
-    <section class="wrap py-16 md:py-20">
-        <div class="grid gap-10 lg:grid-cols-[18rem_1fr]">
+    <section class="border-y border-line bg-panel">
+        <div class="max-w-6xl mx-auto px-5 py-16 md:py-20 grid gap-10 lg:grid-cols-[1fr_1.4fr]">
             <div>
-                <p class="eyebrow">Your course</p>
-                <h2 class="mt-3 text-3xl">Pick your board</h2>
-                <p class="mt-3 text-ink-2">Not sure which one you are on? Your teacher will know, and it is printed on the front of your past papers.</p>
+                <p class="section-label">Your course</p>
+                <h2 class="mt-2 text-2xl md:text-3xl font-bold">Pick your exam board</h2>
+                <p class="mt-3 text-body">When the boards ask for the same thing there is one lesson for all of them; when they differ, each board gets its own. Not sure which board you are on? Your teacher will know, and it is on the front of your past papers.</p>
             </div>
-            <div class="grid gap-5 sm:grid-cols-3">
-                @forelse ($boards as $board)
-                    <a href="{{ app_url('/') }}?board={{ $board->slug }}" class="group border-2 border-ink bg-card p-5 no-underline text-ink hover:bg-ink hover:text-paper transition-colors">
-                        <span class="block text-3xl font-extrabold tracking-tight">{{ $board->name }}</span>
-                        <span class="block mt-6 text-sm font-semibold">See {{ $board->name }} subjects &rarr;</span>
-                    </a>
-                @empty
-                    <a href="{{ app_url('/') }}" class="btn">See all subjects</a>
-                @endforelse
+            <div>
+                <div class="grid gap-3 sm:grid-cols-3">
+                    @forelse ($boards as $board)
+                        <a href="{{ app_url('/') }}?board={{ $board->slug }}" class="subject-card !block hover:!border-brand">
+                            <span class="block text-2xl font-bold text-ink">{{ $board->name }}</span>
+                            <span class="mt-3 inline-flex items-center gap-1 text-sm font-medium text-brand">See subjects <x-glyph name="arrow-right" class="!w-4 !h-4" /></span>
+                        </a>
+                    @empty
+                        <a href="{{ app_url('/') }}" class="btn">See all subjects</a>
+                    @endforelse
+                </div>
+                @if ($subjects->isNotEmpty())
+                    <ul class="mt-6 flex flex-wrap gap-2">
+                        @foreach ($subjects as $subject)
+                            <li><a href="{{ app_url($subject->path()) }}" class="chip !h-8 !px-3 !text-sm !font-medium bg-white border border-line no-underline hover:border-brand-200"><x-glyph :name="$subject->iconName()" class="!w-4 !h-4 text-brand" /> {{ $subject->name }}</a></li>
+                        @endforeach
+                    </ul>
+                @endif
             </div>
         </div>
-        @if ($subjects->isNotEmpty())
-            <ul class="mt-12 flex flex-wrap gap-x-6 gap-y-2 text-lg lg:pl-[20.5rem]">
-                @foreach ($subjects as $subject)
-                    <li><a href="{{ app_url($subject->path()) }}">{{ $subject->name }}</a></li>
-                @endforeach
-            </ul>
-        @endif
     </section>
 
     {{-- Questions people ask. --}}
-    <section class="border-t border-rule">
-        <div class="wrap py-16 md:py-20 grid gap-10 lg:grid-cols-[18rem_1fr]">
-            <div>
-                <p class="eyebrow">Questions</p>
-                <h2 class="mt-3 text-3xl">Before you start</h2>
-            </div>
-            <div class="divide-y divide-rule border-y border-rule max-w-3xl">
-                <details class="group py-4">
-                    <summary class="cursor-pointer font-bold text-lg list-none flex justify-between gap-4">Is it really free?<span class="font-mono text-red group-open:rotate-45 transition-transform">+</span></summary>
-                    <p class="mt-3 text-ink-2">Yes. Every note, question and mock exam is free to use. There is nothing to unlock and no premium version.</p>
+    <section class="max-w-6xl mx-auto px-5 py-16 md:py-20 grid gap-10 lg:grid-cols-[1fr_1.4fr]">
+        <div>
+            <p class="section-label">Questions</p>
+            <h2 class="mt-2 text-2xl md:text-3xl font-bold">Before you start</h2>
+        </div>
+        <div class="card divide-y divide-line">
+            @foreach ([
+                ['Is it really free?', 'Yes. Every note, question and mock exam is free. There is nothing to unlock and no premium version.'],
+                ['Do I need an account?', 'No. There is no sign-up and no login. Your answers, marks, saved lessons and course choices stay in your own browser and are never sent to us.'],
+                ['Which exam boards does it cover?', 'AQA, Edexcel and OCR, for GCSE. Choose your board once and lessons for other boards are hidden.'],
+                ['Are these real past papers?', 'No. Questions and mock exams are written by OpenRevise in the style of each board. For real past papers, see your exam board\'s website.'],
+                ['I found a mistake. What do I do?', 'Every lesson has a "Found a mistake?" link. It takes ten seconds and you do not need to give your name.'],
+            ] as [$question, $answer])
+                <details class="group px-5 py-4">
+                    <summary class="cursor-pointer list-none flex items-center justify-between gap-4 font-semibold text-ink">
+                        {{ $question }}
+                        <x-glyph name="chevron-down" class="!w-4 !h-4 text-muted transition-transform group-open:rotate-180" />
+                    </summary>
+                    <p class="mt-2 text-sm text-body">{{ $answer }}</p>
                 </details>
-                <details class="group py-4">
-                    <summary class="cursor-pointer font-bold text-lg list-none flex justify-between gap-4">Do I need an account?<span class="font-mono text-red group-open:rotate-45 transition-transform">+</span></summary>
-                    <p class="mt-3 text-ink-2">No. There is no sign-up and no login. Your answers, marks and course choices are saved in your own browser, on your own device, and are never sent to us.</p>
-                </details>
-                <details class="group py-4">
-                    <summary class="cursor-pointer font-bold text-lg list-none flex justify-between gap-4">Which exam boards does it cover?<span class="font-mono text-red group-open:rotate-45 transition-transform">+</span></summary>
-                    <p class="mt-3 text-ink-2">AQA, Edexcel and OCR. When the boards ask for the same thing, there is one lesson for all of them; when they differ, each board gets its own version.</p>
-                </details>
-                <details class="group py-4">
-                    <summary class="cursor-pointer font-bold text-lg list-none flex justify-between gap-4">Are these real past papers?<span class="font-mono text-red group-open:rotate-45 transition-transform">+</span></summary>
-                    <p class="mt-3 text-ink-2">No. The questions and mock exams are written by OpenRevise in the style of each board. For real past papers, see your exam board's website.</p>
-                </details>
-                <details class="group py-4">
-                    <summary class="cursor-pointer font-bold text-lg list-none flex justify-between gap-4">I found a mistake. What do I do?<span class="font-mono text-red group-open:rotate-45 transition-transform">+</span></summary>
-                    <p class="mt-3 text-ink-2">Every lesson has a &ldquo;Spotted a mistake?&rdquo; link at the bottom. It takes ten seconds and you do not need to give your name. See <a href="{{ main_url('/contact/') }}">Contact</a> for other ways to get in touch.</p>
-                </details>
-            </div>
+            @endforeach
         </div>
     </section>
 </x-layouts.public>

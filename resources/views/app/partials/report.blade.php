@@ -7,7 +7,7 @@
                     <h2 id="report-title" class="text-lg">Found a mistake?</h2>
                     <p class="text-sm text-muted mt-1">Tell us what is wrong and it will be checked and fixed. No name or email needed.</p>
                 </div>
-                <button type="button" class="icon-btn -mr-2 -mt-2" @click="open = false" aria-label="Close"><x-icon name="x" /></button>
+                <button type="button" class="icon-btn -mr-2 -mt-2" @click="open = false" aria-label="Close"><x-glyph name="x" /></button>
             </div>
             <form x-show="status !== 'sent'" @submit.prevent="send" class="mt-4 space-y-3">
                 <label for="report-message" class="sr-only">What is wrong?</label>
@@ -19,7 +19,7 @@
                 <p x-show="status === 'error'" class="text-sm text-danger">That did not send. Please try again in a moment.</p>
             </form>
             <div x-show="status === 'sent'" class="mt-4 flex items-center gap-2 text-sm font-medium text-ok">
-                <x-icon name="check-circle" /> Thank you. It will be checked and fixed.
+                <x-glyph name="check-circle" /> Thank you. It will be checked and fixed.
             </div>
         </div>
     </div>

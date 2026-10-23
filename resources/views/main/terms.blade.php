@@ -1,5 +1,5 @@
 <x-layouts.page :seo="$seo" eyebrow="Terms of use" heading="Using OpenRevise" page-name="terms">
-    <p class="text-lg text-ink-2">The short version: use OpenRevise to revise, link to it as much as you like, and remember it is a revision aid, not an official source.</p>
+    <p class="lead !text-base">The short version: use OpenRevise to revise, link to it as much as you like, and remember it is a revision aid, not an official source.</p>
 
     <h2>Using the site</h2>
     <ul>
@@ -23,5 +23,5 @@
 
     <h2>Changes</h2>
     <p>These terms may be updated. The date below shows the latest version.</p>
-    <p class="text-sm text-ink-3">Last updated: 23 October 2026</p>
+    <p class="text-sm text-muted">Last updated: 23 October 2026</p>
 </x-layouts.page>

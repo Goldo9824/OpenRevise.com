@@ -24,7 +24,7 @@
                                 @endif
                             </span>
                             <x-lesson-chips :lesson="$lesson" class="hidden sm:inline-flex" />
-                            <x-icon name="chevron-right" class="!w-4 !h-4 text-faint" />
+                            <x-glyph name="chevron-right" class="!w-4 !h-4 text-faint" />
                         </a>
                     @endforeach
                 </section>

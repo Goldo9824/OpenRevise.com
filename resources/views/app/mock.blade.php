@@ -5,28 +5,26 @@
         'answer' => $i['model']->options ? $i['model']->answer : null,
     ])->values();
 
-    // The "For Examiner's Use" grid: one row per main question (01, 02...).
+    // The examiner's grid: one row per main question (01, 02...).
     $grid = $questions->groupBy(fn ($i) => explode('.', $i['number'])[0])->map(fn ($group, $label) => [
         'label' => $label,
         'marks' => $group->sum(fn ($i) => $i['model']->marks),
         'ids' => $group->map(fn ($i) => $i['model']->id)->values()->all(),
     ])->values();
-
-    $lines = fn ($text) => array_values(array_filter(array_map('trim', preg_split('/\R/', (string) $text))));
 @endphp
-<x-layouts.public site="app" page="mock" :subject="$subject->slug" :board="$exam->board->slug" :title="$seo['title']" :description="$seo['description']" :canonical="$seo['canonical']" :robots="$seo['robots']" :json-ld="$seo['jsonLd']">
-    <div x-data="mockExam('mock-{{ $exam->id }}', {{ $template->duration_minutes }}, @js($payload))">
+<x-layouts.app page="mock" :subject="$subject" :board="$exam->board->slug" active="mocks" :title="$seo['title']" :description="$seo['description']" :canonical="$seo['canonical']" :robots="$seo['robots']" :json-ld="$seo['jsonLd']">
+    <div x-data="mockExam('mock-{{ $exam->id }}', {{ $template->duration_minutes }}, @js($payload))" class="max-w-4xl">
 
-        {{-- The bar that follows you down the paper. --}}
-        <div class="timer-bar" x-cloak x-show="stage !== 'cover'">
-            <div class="wrap h-14 flex items-center justify-between gap-4">
-                <span class="font-bold truncate text-sm sm:text-base">{{ $exam->title }}</span>
-                <span class="flex items-center gap-4">
+        {{-- Follows you down the paper while you sit it. --}}
+        <div class="timer-bar -mx-5 md:-mx-9 -mt-6 md:-mt-7 mb-6" x-cloak x-show="stage !== 'cover'">
+            <div class="px-5 md:px-9 h-14 flex items-center justify-between gap-4">
+                <span class="font-semibold truncate text-sm">{{ $exam->title }}</span>
+                <span class="flex items-center gap-3">
                     <template x-if="stage === 'sitting'">
-                        <span class="timer" :class="timed && remaining < 300 && 'text-[#ff8a7f]'" x-text="timed ? clock(remaining) + ' left' : clock(elapsed)" aria-live="off"></span>
+                        <span class="timer inline-flex items-center gap-2" :class="timed && remaining < 300 && 'text-amber-300'"><x-glyph name="clock" class="!w-4 !h-4" /><span x-text="timed ? clock(remaining) + ' left' : clock(elapsed)"></span></span>
                     </template>
                     <template x-if="stage === 'sitting'">
-                        <button type="button" class="btn btn-small !bg-paper !text-ink !border-paper" @click="finish()">Finish</button>
+                        <button type="button" class="btn btn-sm !bg-white !text-brand-dark !border-white" @click="finish()">Finish</button>
                     </template>
                     <template x-if="stage === 'marking'">
                         <span class="timer"><span x-text="scored"></span> / <span x-text="total"></span></span>
@@ -35,112 +33,97 @@
             </div>
         </div>
 
-        <div class="wrap pt-6" x-show="stage === 'cover'">
-            <x-crumbs :items="[['Subjects', app_url('/')], [$subject->fullName(), app_url($subject->path())], ['Mock exams', app_url($subject->path().'mock-exams/')], [$exam->title, null]]" />
+        <div x-show="stage === 'cover'">
+            <x-crumbs :items="[[$subject->name, app_url($subject->path())], ['Mock exams', app_url($subject->path().'mock-exams/')], [$exam->title, null]]" />
         </div>
 
-        {{-- Front cover, like the real paper. --}}
-        <section class="wrap pt-8 pb-12" x-show="stage !== 'sitting'">
-            <div class="paper max-w-3xl mx-auto">
-                <div class="paper-head px-6 md:px-10 pt-8 pb-6 flex flex-wrap items-start justify-between gap-4">
+        {{-- The front cover. --}}
+        <section class="card mt-4 overflow-hidden" x-show="stage !== 'sitting'">
+            <div class="px-6 md:px-8 py-6 bg-panel border-b border-line flex flex-wrap items-start justify-between gap-4">
+                <div>
+                    <p class="section-label">{{ $exam->board->name }} &middot; GCSE {{ $subject->name }}</p>
+                    <h1 class="page-title mt-1">{{ $exam->title }}</h1>
+                    <p class="mt-1 text-sm text-muted">{{ $template->name }}@if ($template->tierLabel()) &middot; {{ $template->tierLabel() }}@endif @if ($exam->topic) &middot; Topic: {{ $exam->topic->title }}@endif</p>
+                </div>
+                <div class="flex gap-6 text-sm">
+                    <div><p class="text-muted text-xs">Time allowed</p><p class="font-semibold text-ink">{{ $template->durationLabel() }}</p></div>
+                    <div><p class="text-muted text-xs">Total marks</p><p class="font-semibold text-ink">{{ $template->total_marks }}</p></div>
+                </div>
+            </div>
+
+            <div class="px-6 md:px-8 py-6 grid gap-8 md:grid-cols-[1fr_auto]">
+                <div class="space-y-5 text-sm">
                     <div>
-                        <p class="text-[2.4rem] font-extrabold leading-none tracking-tight">{{ $exam->board->name }}</p>
-                        <p class="eyebrow mt-2">Mock exam by OpenRevise</p>
+                        <h2 class="text-sm">Instructions</h2>
+                        <ul class="mt-1.5 list-disc pl-5 space-y-1 marker:text-faint">
+                            @forelse ($template->instructionLines() as $line)
+                                <li>{{ $line }}</li>
+                            @empty
+                                <li>Answer all questions in the spaces provided.</li>
+                                <li>Show your working in calculations.</li>
+                            @endforelse
+                            <li>Your answers are saved on this device as you type.</li>
+                        </ul>
                     </div>
-                    <div class="text-right">
-                        <p class="font-mono font-bold">{{ strtoupper(config('openrevise.level')) }}</p>
-                        <p class="font-mono text-sm text-ink-3">{{ strtoupper($subject->name) }}</p>
+                    <div>
+                        <h2 class="text-sm">Information</h2>
+                        <ul class="mt-1.5 list-disc pl-5 space-y-1 marker:text-faint">
+                            <li>The maximum mark for this paper is {{ $template->total_marks }}.</li>
+                            <li>The marks for each question are shown in brackets.</li>
+                            @foreach ($template->informationLines() as $line)
+                                <li>{{ $line }}</li>
+                            @endforeach
+                        </ul>
                     </div>
+                    @if ($exam->description)
+                        <p class="text-muted">{{ $exam->description }}</p>
+                    @endif
                 </div>
 
-                <div class="px-6 md:px-10 py-8">
-                    <h1 class="text-[1.9rem] md:text-[2.3rem] uppercase tracking-tight">{{ $subject->name }}</h1>
-                    <p class="mt-1 text-xl font-bold">{{ $template->name }}@if ($template->tierLabel()) <span class="text-ink-2">{{ $template->tierLabel() }}</span>@endif</p>
-                    @if ($exam->title !== trim($exam->board->name.' '.$subject->name.' '.$template->name))
-                        <p class="mt-1 text-ink-2">{{ $exam->title }}</p>
-                    @endif
-                    @if ($exam->topic)
-                        <p class="mt-1 text-ink-2">Topic: {{ $exam->topic->title }}</p>
-                    @endif
+                <table class="examiner-table self-start">
+                    <caption>Your marks</caption>
+                    <thead><tr><th>Question</th><th>Mark</th></tr></thead>
+                    <tbody>
+                        @foreach ($grid as $row)
+                            <tr>
+                                <td>{{ $row['label'] }}</td>
+                                <td class="got"><span x-show="stage === 'marking'" x-text="groupScore(@js($row['ids']))"></span><span class="text-faint font-normal" x-show="stage !== 'marking'">/{{ $row['marks'] }}</span></td>
+                            </tr>
+                        @endforeach
+                        <tr><th>Total</th><td class="got"><span x-show="stage === 'marking'" x-text="scored"></span><span class="text-faint font-normal" x-show="stage !== 'marking'">/{{ $template->total_marks }}</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
 
-                    <p class="mt-6 text-lg"><span class="font-bold">Time allowed:</span> {{ $template->durationLabel() }}</p>
+            <div class="px-6 md:px-8 pb-7 flex flex-wrap gap-3" x-show="stage === 'cover'">
+                <button type="button" class="btn btn-lg" @click="start(true)"><x-glyph name="clock" /> Start timed ({{ $template->durationLabel() }})</button>
+                <button type="button" class="btn btn-outline btn-lg" @click="start(false)">Start without a timer</button>
+            </div>
 
-                    <div class="mt-8 grid gap-8 md:grid-cols-[1fr_auto]">
-                        <div class="space-y-6 text-[.98rem]">
-                            <div>
-                                <h2 class="font-bold text-base uppercase tracking-wide">Instructions</h2>
-                                <ul class="mt-2 list-disc pl-5 space-y-1">
-                                    @forelse ($template->instructionLines() as $line)
-                                        <li>{{ $line }}</li>
-                                    @empty
-                                        <li>Answer all questions in the spaces provided.</li>
-                                        <li>Show all your working in calculations.</li>
-                                        <li>Your answers are saved on this device as you type.</li>
-                                    @endforelse
-                                </ul>
-                            </div>
-                            <div>
-                                <h2 class="font-bold text-base uppercase tracking-wide">Information</h2>
-                                <ul class="mt-2 list-disc pl-5 space-y-1">
-                                    <li>The maximum mark for this paper is {{ $template->total_marks }}.</li>
-                                    <li>The marks for questions are shown in brackets.</li>
-                                    @foreach ($template->informationLines() as $line)
-                                        <li>{{ $line }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                            @if ($exam->description)
-                                <p class="text-ink-2">{{ $exam->description }}</p>
-                            @endif
-                        </div>
-
-                        <table class="examiner-table self-start">
-                            <caption class="text-left font-bold text-xs uppercase tracking-wide pb-1.5">For examiner's use</caption>
-                            <thead><tr><th>Question</th><th>Mark</th></tr></thead>
-                            <tbody>
-                                @foreach ($grid as $row)
-                                    <tr>
-                                        <td>{{ $row['label'] }}</td>
-                                        <td class="got"><span x-show="stage === 'marking'" x-text="groupScore(@js($row['ids']))"></span><span class="text-ink-3 font-normal" x-show="stage !== 'marking'">/{{ $row['marks'] }}</span></td>
-                                    </tr>
-                                @endforeach
-                                <tr><th>Total</th><td class="got"><span x-show="stage === 'marking'" x-text="scored"></span><span class="text-ink-3 font-normal" x-show="stage !== 'marking'">/{{ $template->total_marks }}</span></td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="mt-10 flex flex-wrap gap-3" x-show="stage === 'cover'">
-                        <button type="button" class="btn" @click="start(true)">Start, timed ({{ $template->durationLabel() }})</button>
-                        <button type="button" class="btn btn-ghost" @click="start(false)">Start without a timer</button>
-                    </div>
-
-                    <div class="mt-10 border-t-2 border-ink pt-6" x-cloak x-show="stage === 'marking'">
-                        <p class="eyebrow">Your result</p>
-                        <p class="mt-1 text-[2rem] font-extrabold"><span class="score" x-text="scored + ' / ' + total"></span> <span class="text-ink-3 text-xl font-bold" x-text="'(' + percent + '%)'"></span></p>
-                        <p class="mt-2 text-ink-2">Multiple-choice questions are marked for you. For the rest, open each mark scheme below and give yourself the marks you earned.</p>
-                        <button type="button" class="btn btn-ghost btn-small mt-4" @click="restart()">Sit it again</button>
-                    </div>
-                </div>
+            <div class="mx-6 md:mx-8 mb-7 rounded-xl bg-brand-50 border border-brand-100 p-5" x-cloak x-show="stage === 'marking'">
+                <p class="section-label">Your result</p>
+                <p class="mt-1 text-3xl font-bold text-ink"><span class="score" x-text="scored + ' / ' + total"></span> <span class="text-lg text-muted font-semibold" x-text="'(' + percent + '%)'"></span></p>
+                <div class="progress mt-3 max-w-sm bg-white"><span :style="'width:' + percent + '%'"></span></div>
+                <p class="mt-3 text-sm text-body">Multiple-choice questions are marked for you. For the rest, open each mark scheme below and give yourself the marks you earned.</p>
+                <button type="button" class="btn btn-quiet btn-sm mt-4" @click="restart()"><x-glyph name="rotate" /> Sit it again</button>
             </div>
         </section>
 
         {{-- The questions. --}}
-        <section class="wrap pb-20 max-w-3xl" x-cloak x-show="stage !== 'cover'">
-            <div class="space-y-12 pt-8">
-                @foreach ($sections as $sectionName => $items)
-                    @if ($sectionName !== '')
-                        <h2 class="text-xl uppercase tracking-wide border-b-2 border-ink pb-2 pt-4">{{ $sectionName }}</h2>
-                    @endif
-                    @foreach ($items as $item)
-                        @include('app.partials.question', ['item' => $item, 'number' => $item['number'], 'mode' => 'mock'])
-                    @endforeach
+        <section class="mt-6 space-y-4" x-cloak x-show="stage !== 'cover'">
+            @foreach ($sections as $sectionName => $items)
+                @if ($sectionName !== '')
+                    <h2 class="text-lg pt-3">{{ $sectionName }}</h2>
+                @endif
+                @foreach ($items as $item)
+                    @include('app.partials.question', ['item' => $item, 'number' => $item['number'], 'mode' => 'mock'])
                 @endforeach
-            </div>
+            @endforeach
 
-            <div class="mt-14 border-t-2 border-ink pt-6 text-center" x-show="stage === 'sitting'">
-                <p class="font-bold uppercase tracking-wide">End of questions</p>
-                <button type="button" class="btn mt-4" @click="finish()">Finish and mark my paper</button>
+            <div class="pt-4 text-center" x-show="stage === 'sitting'">
+                <p class="text-sm text-muted">End of questions</p>
+                <button type="button" class="btn btn-lg mt-3" @click="finish()">Finish and mark my paper</button>
             </div>
         </section>
     </div>
-</x-layouts.public>
+</x-layouts.app>

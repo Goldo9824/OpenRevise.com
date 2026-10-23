@@ -1,5 +1,5 @@
 <div class="search hidden sm:block" x-data="siteSearch('{{ app_url('/_search') }}', '{{ app_url('/search/') }}')" @click.outside="open = false" @keydown.escape="open = false">
-    <x-icon name="search" />
+    <x-glyph name="search" />
     <form action="{{ app_url('/search/') }}" method="get" role="search" @submit="go($event)">
         <label for="site-search" class="sr-only">Search</label>
         <input id="site-search" type="search" name="q" autocomplete="off" placeholder="Search for a topic, subject or lesson..."
@@ -20,4 +20,4 @@
         <p x-show="!results.length && q.length > 1 && !loading" class="px-3 py-2 text-sm text-muted">Nothing found for &ldquo;<span x-text="q"></span>&rdquo;.</p>
     </div>
 </div>
-<a href="{{ app_url('/search/') }}" class="icon-btn sm:hidden" aria-label="Search"><x-icon name="search" /></a>
+<a href="{{ app_url('/search/') }}" class="icon-btn sm:hidden" aria-label="Search"><x-glyph name="search" /></a>

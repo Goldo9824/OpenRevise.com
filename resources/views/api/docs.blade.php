@@ -9,17 +9,17 @@
     @vite('resources/css/site.css')
 </head>
 <body>
-    <header class="site-header">
-        <div class="wrap flex items-center justify-between gap-4 h-16">
-            <div class="flex items-baseline gap-3">
-                <x-wordmark :href="main_url('/')" />
-                <span class="eyebrow">API</span>
+    <header class="topbar">
+        <div class="h-full max-w-4xl mx-auto px-5 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <x-logo :href="main_url('/')" />
+                <span class="chip chip-brand">API</span>
             </div>
-            <a href="{{ api_url('/v1/docs') }}" class="nav-link">As Markdown</a>
+            <a href="{{ api_url('/v1/docs') }}" class="btn btn-quiet btn-sm">As Markdown</a>
         </div>
     </header>
-    <main class="wrap py-12">
-        <article class="api-docs page-prose !max-w-3xl">
+    <main class="max-w-4xl mx-auto px-5 py-10">
+        <article class="api-docs prose-page !max-w-none">
             {!! $content !!}
         </article>
     </main>

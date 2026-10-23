@@ -3,7 +3,7 @@
         <x-crumbs :items="[['Subjects', app_url('/gcse/')], [$subject->fullName(), null]]" />
 
         <div class="mt-4 flex items-center gap-4">
-            <span class="subject-tile" style="--tile: {{ $subject->coverColour() }}"><x-icon :name="$subject->iconName()" /></span>
+            <span class="subject-tile" style="--tile: {{ $subject->coverColour() }}"><x-glyph :name="$subject->iconName()" /></span>
             <h1 class="page-title">{{ $subject->fullName() }}</h1>
         </div>
         <p class="lead mt-3">{{ $subject->description ?: 'Revision notes for every topic, with exam questions after each lesson and mock exams for your board.' }}</p>
@@ -15,7 +15,7 @@
                 </a>
             @endforeach
             @if ($outline->mockExams)
-                <a href="{{ app_url($subject->path().'mock-exams/') }}" class="btn btn-outline btn-sm"><x-icon name="clipboard-list" /> Mock exams ({{ $outline->mockExams }})</a>
+                <a href="{{ app_url($subject->path().'mock-exams/') }}" class="btn btn-outline btn-sm"><x-glyph name="clipboard-list" /> Mock exams ({{ $outline->mockExams }})</a>
             @endif
         </div>
 

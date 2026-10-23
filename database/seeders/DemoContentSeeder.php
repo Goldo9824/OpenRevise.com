@@ -294,7 +294,7 @@ TXT,
                 'tier' => 'all',
                 'duration_minutes' => 25,
                 'total_marks' => 12,
-                'instructions' => "Answer all questions.\nShow your working in calculations.\nYour answers are saved on this device as you type.",
+                'instructions' => "Answer all questions.\nShow your working in calculations.",
                 'information' => 'You may use a calculator.',
             ]
         );

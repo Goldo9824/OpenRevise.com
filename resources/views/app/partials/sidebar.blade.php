@@ -4,19 +4,19 @@
 @if ($subject)
     <a href="{{ app_url($subject->path()) }}" class="side-title">
         <span>{{ $subject->fullName() }}</span>
-        <x-icon name="chevron-right" class="!w-4 !h-4 text-faint" />
+        <x-glyph name="chevron-right" class="!w-4 !h-4 text-faint" />
     </a>
 @else
     <p class="side-title">GCSE revision</p>
 @endif
 
 <nav class="space-y-0.5" aria-label="Revision">
-    <a href="{{ app_url('/') }}" @class(['side-link', 'is-active' => $active === 'home'])><x-icon name="home" /> Home</a>
-    <a href="{{ app_url('/gcse/') }}" @class(['side-link', 'is-active' => $active === 'subjects'])><x-icon name="book-open" /> Subjects</a>
+    <a href="{{ app_url('/') }}" @class(['side-link', 'is-active' => $active === 'home'])><x-glyph name="home" /> Home</a>
+    <a href="{{ app_url('/gcse/') }}" @class(['side-link', 'is-active' => $active === 'subjects'])><x-glyph name="book-open" /> Subjects</a>
 
     @if ($subject)
         <a href="{{ app_url($subject->path()) }}" @class(['side-link', 'is-active' => $active === 'subject'])>
-            <x-icon :name="$subject->iconName()" /> {{ $subject->name }}
+            <x-glyph :name="$subject->iconName()" /> {{ $subject->name }}
         </a>
         @if ($outline->topics->isNotEmpty())
             <div class="py-1 space-y-0.5">
@@ -31,21 +31,21 @@
 <nav class="mt-5 pt-4 border-t border-line space-y-0.5" aria-label="More">
     @if ($subject)
         <a href="{{ app_url($subject->path().'mock-exams/') }}" @class(['side-link', 'is-active' => $active === 'mocks'])>
-            <x-icon name="clipboard-list" /> Mock exams
+            <x-glyph name="clipboard-list" /> Mock exams
             @if ($outline->mockExams)
                 <span class="ml-auto chip">{{ $outline->mockExams }}</span>
             @endif
         </a>
     @endif
     <a href="{{ app_url('/saved/') }}" @class(['side-link', 'is-active' => $active === 'saved'])>
-        <x-icon name="bookmark" /> Saved
+        <x-glyph name="bookmark" /> Saved
         <span class="ml-auto chip" x-cloak x-show="$store.saved.items.length" x-text="$store.saved.items.length"></span>
     </a>
 </nav>
 
 {{-- Your course: hides lessons that are not on it. Saved on this device. --}}
 <div class="mt-6 rounded-xl border border-line bg-white p-3.5">
-    <p class="flex items-center gap-2 text-sm font-semibold text-ink"><x-icon name="sliders" class="!w-4 !h-4 text-brand" /> Your course</p>
+    <p class="flex items-center gap-2 text-sm font-semibold text-ink"><x-glyph name="sliders" class="!w-4 !h-4 text-brand" /> Your course</p>
     <p class="mt-2 text-xs text-muted">Exam board</p>
     <div class="pills mt-1">
         @foreach (\App\Support\Navigation::boards() as $b)

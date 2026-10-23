@@ -99,12 +99,12 @@ class Subject extends ContentModel
         }
 
         return match (true) {
+            str_contains($this->slug, 'computer') => 'monitor',
             str_contains($this->slug, 'bio') => 'leaf',
             str_contains($this->slug, 'chem'), str_contains($this->slug, 'science') => 'flask',
             str_contains($this->slug, 'phys') => 'atom',
             str_contains($this->slug, 'math') => 'sigma',
             str_contains($this->slug, 'business') || str_contains($this->slug, 'econ') => 'briefcase',
-            str_contains($this->slug, 'computer') => 'monitor',
             str_contains($this->slug, 'geog') => 'globe',
             str_contains($this->slug, 'hist') => 'landmark',
             default => 'book-open',

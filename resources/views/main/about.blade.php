@@ -1,5 +1,5 @@
 <x-layouts.page :seo="$seo" eyebrow="About" heading="Free revision, for everyone sitting GCSEs" page-name="about">
-    <p class="text-lg text-ink-2">OpenRevise is a free revision website for GCSE students. It has notes on every topic, exam questions after every lesson and mock exams, organised by exam board. There are no accounts and nothing to pay.</p>
+    <p class="lead !text-base">OpenRevise is a free revision website for GCSE students. It has notes on every topic, exam questions after every lesson and mock exams, organised by exam board. There are no accounts and nothing to pay.</p>
 
     <h2>Why it exists</h2>
     <p>Good revision material should not depend on what your family can afford. The best GCSE resources are often behind a subscription, buried in long videos or written for a different exam board. OpenRevise puts short, accurate notes and realistic exam practice in one place, sorted by your board, and keeps them free.</p>

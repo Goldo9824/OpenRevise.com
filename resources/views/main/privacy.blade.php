@@ -1,5 +1,5 @@
 <x-layouts.page :seo="$seo" eyebrow="Privacy" heading="What OpenRevise collects" page-name="privacy">
-    <p class="text-lg text-ink-2">Very little. There are no accounts, no cookies, no advertising trackers and no scripts from other companies. This page explains exactly what is collected and why.</p>
+    <p class="lead !text-base">Very little. There are no accounts, no cookies, no advertising trackers and no scripts from other companies. This page explains exactly what is collected and why.</p>
 
     <h2>Who is responsible</h2>
     <p>OpenRevise is run by {{ $owner['name'] ?: 'the owner of OpenRevise' }}, who is the data controller for the information below.@if ($owner['email']) You can reach them at <a href="mailto:{{ $owner['email'] }}">{{ $owner['email'] }}</a>.@endif</p>
@@ -32,5 +32,5 @@
 
     <h2>Changes</h2>
     <p>If this page changes, the date below changes too.</p>
-    <p class="text-sm text-ink-3">Last updated: 23 October 2026</p>
+    <p class="text-sm text-muted">Last updated: 23 October 2026</p>
 </x-layouts.page>

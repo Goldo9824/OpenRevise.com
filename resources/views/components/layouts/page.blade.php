@@ -1,19 +1,19 @@
 @props(['seo', 'eyebrow', 'heading', 'pageName' => 'page'])
 {{-- Shared frame for the text pages: About, Privacy, Terms, Contact. --}}
-<x-layouts.public site="main" :page="$pageName" :title="$seo['title']" :description="$seo['description']" :canonical="$seo['canonical']">
-    <div class="wrap pt-12 pb-20 md:pt-16 grid gap-10 lg:grid-cols-[14rem_1fr]">
-        <aside class="lg:pt-3">
-            <nav aria-label="OpenRevise pages">
-                <ul class="flex flex-wrap gap-x-5 gap-y-1 lg:block lg:space-y-1.5 text-[.95rem]">
-                    @foreach (['/about/' => 'About', '/contact/' => 'Contact', '/privacy/' => 'Privacy', '/terms/' => 'Terms of use'] as $path => $label)
-                        <li><a href="{{ main_url($path) }}" @class(['no-underline', 'font-bold text-ink' => $seo['canonical'] === main_url($path), 'text-ink-2' => $seo['canonical'] !== main_url($path)])>{{ $label }}</a></li>
+<x-layouts.public :page="$pageName" :title="$seo['title']" :description="$seo['description']" :canonical="$seo['canonical']">
+    <div class="max-w-6xl mx-auto px-5 py-10 md:py-14 grid gap-10 lg:grid-cols-[13rem_1fr]">
+        <aside>
+            <nav aria-label="OpenRevise pages" class="lg:sticky lg:top-24">
+                <ul class="flex flex-wrap gap-1 lg:block lg:space-y-0.5">
+                    @foreach (['/about/' => ['About', 'help-circle'], '/contact/' => ['Contact', 'flag'], '/privacy/' => ['Privacy', 'eye'], '/terms/' => ['Terms of use', 'file-text']] as $path => [$label, $icon])
+                        <li><a href="{{ main_url($path) }}" @class(['side-link', 'is-active' => $seo['canonical'] === main_url($path)])><x-glyph :name="$icon" /> {{ $label }}</a></li>
                     @endforeach
                 </ul>
             </nav>
         </aside>
-        <article class="page-prose">
-            <p class="eyebrow">{{ $eyebrow }}</p>
-            <h1 class="!mt-3 text-[2.4rem] md:text-[3rem] leading-none">{{ $heading }}</h1>
+        <article class="prose-page">
+            <p class="section-label">{{ $eyebrow }}</p>
+            <h1 class="page-title !mt-2">{{ $heading }}</h1>
             {{ $slot }}
         </article>
     </div>
