@@ -78,22 +78,48 @@ jobs:
         env:
           OPENREVISE_DOMAIN: openrevise.com
 
-      # 3. Upload: only changed files after the first run. The .env file, the
+      # 3. Upload. The upload action keeps a record of what it sent
+      # (.ftp-deploy-sync-state.json on the server) and then sends only changed
+      # files. Without the record it would send every file one by one, which
+      # takes hours, so the first deploy goes up as one archive instead.
+      - name: Look for an earlier deploy on the server
+        id: server
+        run: scripts/first-deploy.sh check >> "$GITHUB_OUTPUT"
+        env:
+          FTP_SERV: ${{ secrets.FTP_SERV }}
+          FTP_USER: ${{ secrets.ID }}
+          FTP_PASSWORD: ${{ secrets.PASSWORD }}
+
+      # Uploads changed files and deletes removed ones. The .env file, the
       # storage folder (lesson files) and uploaded diagrams are not in dist/.
       # The action only ever deletes files it uploaded itself, so it never
-      # touches them on the server.
-      - name: Upload over FTP
+      # touches them on the server. On the first deploy this is a dry run that
+      # only writes the record for the next step.
+      - name: Upload changed files over FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERV }}
           username: ${{ secrets.ID }}
           password: ${{ secrets.PASSWORD }}
-          # Explicit FTP over TLS. If LWS refuses it, change to "ftp".
+          # Explicit FTP over TLS. If LWS refuses it, change to "ftp" (and
+          # remove --ssl-reqd in scripts/first-deploy.sh).
           protocol: ftps
           local-dir: ./dist/
           server-dir: ./
+          dry-run: ${{ steps.server.outputs.first == 'true' }}
           exclude: |
             **/.git*
             **/.git*/**
             openrevise-core/.env
             openrevise-core/storage/**
+
+      # First deploy only: deletes everything already on the server, then
+      # uploads the site as one archive and unpacks it there.
+      - name: First deploy - upload the site as one archive
+        if: steps.server.outputs.first == 'true'
+        run: scripts/first-deploy.sh upload dist
+        env:
+          FTP_SERV: ${{ secrets.FTP_SERV }}
+          FTP_USER: ${{ secrets.ID }}
+          FTP_PASSWORD: ${{ secrets.PASSWORD }}
+          OPENREVISE_DOMAIN: openrevise.com
