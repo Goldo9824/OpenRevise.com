@@ -34,5 +34,16 @@
         <env name="MAIL_MAILER" value="array"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array" force="true"/>
+        <!-- Laravel reads $_SERVER first, so a variable set by CI cannot leak into the tests. -->
+        <server name="APP_KEY" value="base64:Fq2gu+mF1DYI6Pr4xT8lXQHbWtNEYM1oX7n2YlIM0CA=" force="true"/>
+        <server name="CACHE_STORE" value="array" force="true"/>
+        <server name="DB_DRIVER" value="sqlite" force="true"/>
+        <server name="CONTENT_DB_DATABASE" value=":memory:" force="true"/>
+        <server name="ADMIN_DB_DATABASE" value=":memory:" force="true"/>
+        <server name="ANALYTICS_DB_DATABASE" value=":memory:" force="true"/>
+        <server name="OPENREVISE_DOMAIN" value="openrevise.test" force="true"/>
+        <server name="OPENREVISE_SCHEME" value="http" force="true"/>
+        <server name="OPENREVISE_PORT" value="" force="true"/>
+        <server name="SESSION_DRIVER" value="array" force="true"/>
     </php>
 </phpunit>
