@@ -68,7 +68,7 @@ class ApiRequestResource extends Resource
             ->defaultSort('created_at', 'desc')
             ->filters([
                 SelectFilter::make('api_key_id')->label('Key')->options(fn () => ApiKey::pluck('name', 'id')),
-                Filter::make('failed')->label('Errors only')->query(fn (Builder $q) => $q->where('status', '>=', 400)),
+                Filter::make('failed')->label('Errors only')->query(fn (Builder $query) => $query->where('status', '>=', 400)),
             ])
             ->recordActions([ViewAction::make()]);
     }

@@ -154,7 +154,7 @@ class Reports
             }
         }
 
-        $top = collect($rows)->sortByDesc('views')->take($limit);
+        $top = collect($rows)->sortByDesc('visitors')->take($limit);
 
         // The lessons live in another database: look their titles up by ID.
         $lessons = Lesson::with('chapter.topic.subject')->whereIn('id', $top->keys())->get()->keyBy('id');

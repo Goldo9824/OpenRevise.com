@@ -41,8 +41,14 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogo(fn () => view('filament.brand'))
             ->favicon('/favicon.svg')
             ->colors([
-                'primary' => Color::hex('#1f3fbf'),
-                'danger' => Color::hex('#cf3a2f'),
+                // The deep green of the public sites (#0f6b56 at 600).
+                'primary' => [
+                    50 => 'oklch(0.977 0.012 172)', 100 => 'oklch(0.95 0.025 172)', 200 => 'oklch(0.905 0.045 172)',
+                    300 => 'oklch(0.84 0.07 172)', 400 => 'oklch(0.72 0.09 172)', 500 => 'oklch(0.6 0.1 172)',
+                    600 => 'oklch(0.48 0.09 172)', 700 => 'oklch(0.42 0.08 172)', 800 => 'oklch(0.36 0.07 172)',
+                    900 => 'oklch(0.3 0.055 172)', 950 => 'oklch(0.22 0.04 172)',
+                ],
+                'danger' => Color::Red,
                 'gray' => Color::Stone,
             ])
             ->font(

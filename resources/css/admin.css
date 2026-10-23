@@ -1,2 +1,185 @@
-/* The admin panel uses the same typeface as the public sites, served locally. */
+/*
+ | The admin panel: Filament's own styles, plus the typeface of the public
+ | sites and the few pieces of OpenRevise's custom widgets and pages.
+ */
 @import '@fontsource-variable/inter/wght.css';
+
+.or-ranked-head {
+    display: flex;
+    justify-content: flex-end;
+    font-size: .75rem;
+    font-weight: 500;
+    color: rgb(107 114 128);
+    padding-bottom: .5rem;
+}
+
+.or-ranked {
+    display: grid;
+    gap: .35rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.or-ranked li {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    padding: .4rem .6rem;
+    border-radius: .4rem;
+    font-size: .875rem;
+}
+
+.or-ranked .bar {
+    position: absolute;
+    inset: 0 auto 0 0;
+    border-radius: .4rem;
+    background: rgb(15 107 86 / .09);
+}
+
+.or-ranked .label {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.or-ranked .label a:hover {
+    text-decoration: underline;
+}
+
+.or-ranked .meta {
+    font-size: .75rem;
+    color: rgb(107 114 128);
+}
+
+.or-ranked .value {
+    position: relative;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.or-funnel {
+    display: grid;
+    gap: .9rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.or-funnel .row {
+    display: flex;
+    justify-content: space-between;
+    font-size: .875rem;
+}
+
+.or-funnel .track {
+    margin-top: .3rem;
+    height: .6rem;
+    border-radius: 1rem;
+    background: rgb(243 244 246);
+    overflow: hidden;
+}
+
+.or-funnel .fill {
+    height: 100%;
+    border-radius: 1rem;
+    background: #0f6b56;
+}
+
+.or-muted {
+    font-size: .875rem;
+    color: rgb(107 114 128);
+}
+
+.or-settings {
+    display: grid;
+    gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+    .or-settings {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .or-settings .wide {
+        grid-column: 1 / -1;
+    }
+}
+
+.or-form {
+    display: grid;
+    gap: 1rem;
+    max-width: 40rem;
+}
+
+.or-field {
+    display: grid;
+    gap: .35rem;
+    font-size: .875rem;
+    font-weight: 500;
+}
+
+.or-help {
+    font-size: .75rem;
+    font-weight: 400;
+    color: rgb(107 114 128);
+}
+
+.or-error {
+    font-size: .875rem;
+    color: #b91c1c;
+}
+
+.or-list {
+    list-style: none;
+    margin: 0 0 1rem;
+    padding: 0;
+}
+
+.or-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    padding: .65rem 0;
+    border-bottom: 1px solid rgb(229 231 235);
+    font-size: .875rem;
+}
+
+.or-codes {
+    border: 1px solid #f5d27a;
+    background: #fffbeb;
+    border-radius: .6rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.or-codes ul {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .35rem;
+    margin: .75rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: .875rem;
+    user-select: all;
+}
+
+.or-check {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    font-size: .875rem;
+    font-weight: 500;
+}
+
+code {
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: .85em;
+}

@@ -88,7 +88,7 @@ class LessonResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn (Builder $q) => $q->with(['boards', 'chapter.topic.subject'])->withCount('questions'))
+            ->modifyQueryUsing(fn (Builder $query) => $query->with(['boards', 'chapter.topic.subject']))
             ->columns([
                 TextColumn::make('title')->searchable()->weight('bold')->wrap()
                     ->description(fn (Lesson $l) => $l->chapter->topic->subject->name.' › '.$l->chapter->topic->title.' › '.$l->chapter->title),
@@ -99,15 +99,15 @@ class LessonResource extends Resource
                         $l->course === Course::Separate ? 'Separate only' : null,
                     ]))),
                 ContentOptions::statusColumn(),
-                TextColumn::make('questions_count')->label('Questions')->alignCenter(),
+                TextColumn::make('questions_count')->counts('questions')->label('Questions')->alignCenter(),
                 TextColumn::make('updated_at')->label('Updated')->since()->sortable(),
             ])
             ->filters([
                 SelectFilter::make('status')->options(Status::options()),
                 SelectFilter::make('subject')->options(ContentOptions::subjects())
-                    ->query(fn (Builder $q, array $data) => $data['value'] ? $q->whereHas('chapter.topic', fn ($t) => $t->where('subject_id', $data['value'])) : $q),
+                    ->query(fn (Builder $query, array $data) => $data['value'] ? $query->whereHas('chapter.topic', fn ($t) => $t->where('subject_id', $data['value'])) : $query),
                 SelectFilter::make('board')->options(ContentOptions::boards())
-                    ->query(fn (Builder $q, array $data) => $data['value'] ? $q->forBoard((int) $data['value']) : $q),
+                    ->query(fn (Builder $query, array $data) => $data['value'] ? $query->forBoard((int) $data['value']) : $query),
             ])
             ->defaultSort('updated_at', 'desc')
             ->recordActions([EditAction::make(), ContentOptions::viewOnSiteAction()])

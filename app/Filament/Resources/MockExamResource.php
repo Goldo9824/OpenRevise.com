@@ -58,12 +58,12 @@ class MockExamResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn (Builder $q) => $q->with(['subject', 'board', 'paperTemplate'])->withCount('questions')->withSum('questions', 'marks'))
+            ->modifyQueryUsing(fn (Builder $query) => $query->with(['subject', 'board', 'paperTemplate']))
             ->columns([
                 TextColumn::make('title')->searchable()->weight('bold')
                     ->description(fn (MockExam $e) => $e->subject->name.' · '.$e->board->name.' · '.$e->paperTemplate->name),
-                TextColumn::make('questions_count')->label('Questions'),
-                TextColumn::make('questions_sum_marks')->label('Marks')
+                TextColumn::make('questions_count')->counts('questions')->label('Questions'),
+                TextColumn::make('questions_sum_marks')->sum('questions', 'marks')->label('Marks')
                     ->formatStateUsing(fn ($state, MockExam $e) => (int) $state.' / '.$e->paperTemplate->total_marks)
                     ->color(fn ($state, MockExam $e) => (int) $state === $e->paperTemplate->total_marks ? null : 'warning'),
                 ContentOptions::statusColumn(),

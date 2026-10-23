@@ -22,9 +22,9 @@ class ListLessons extends ListRecords
     {
         return [
             'all' => Tab::make('All'),
-            'drafts' => Tab::make('Drafts to check')->modifyQueryUsing(fn (Builder $q) => $q->where('status', Status::Draft)),
-            'published' => Tab::make('Published')->modifyQueryUsing(fn (Builder $q) => $q->where('status', Status::Published)),
-            'hidden' => Tab::make('Hidden')->modifyQueryUsing(fn (Builder $q) => $q->where('status', Status::Hidden)),
+            'drafts' => Tab::make('Drafts to check')->modifyQueryUsing(fn (Builder $query) => $query->where('status', Status::Draft)),
+            'published' => Tab::make('Published')->modifyQueryUsing(fn (Builder $query) => $query->where('status', Status::Published)),
+            'hidden' => Tab::make('Hidden')->modifyQueryUsing(fn (Builder $query) => $query->where('status', Status::Hidden)),
         ];
     }
 }
