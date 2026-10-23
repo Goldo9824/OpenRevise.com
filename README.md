@@ -141,7 +141,15 @@ Each `index.php` finds `openrevise-core` next to it and Laravel picks the routes
 
 ## Deploying
 
-Every push to `main` runs [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml): it runs the tests, installs PHP packages without dev tools, builds the CSS and JavaScript, assembles the folders and uploads them over FTP. After the first run only changed files go up. The `.env` file, the `storage` folder (lesson files) and uploaded diagrams are never in the upload, so a deploy cannot replace or delete them.
+Every push to `main` runs [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml): it runs the tests, installs PHP packages without dev tools, builds the CSS and JavaScript, assembles the folders and uploads them over FTP. Only changed files go up. The `.env` file, the `storage` folder (lesson files) and uploaded diagrams are never in the upload, so a deploy cannot replace or delete them.
+
+The upload keeps a record of what it sent in `.ftp-deploy-sync-state.json` at the hosting root. When that record is missing (the first deploy), sending thousands of files one by one would take hours, so [`scripts/first-deploy.sh`](scripts/first-deploy.sh) does it differently:
+
+1. It uploads the whole site as one archive, plus a one-time unpacker ([`scripts/unpack.php`](scripts/unpack.php)).
+2. It calls the unpacker over HTTPS with a one-time token. The unpacker extracts the archive into a hidden folder, deletes everything already in the hosting space, moves the new files into place, then deletes the archive and itself. It never deletes `openrevise-core/.env`, `openrevise-core/storage` (lesson files), `app.openrevise.com/media` (diagrams) or `.well-known` (SSL certificates).
+3. It saves the record last, so the next deploy uploads changed files only. If anything fails, the record is not saved and the next deploy starts over.
+
+To force a full deploy later, delete `.ftp-deploy-sync-state.json` in the LWS file manager and run the workflow again.
 
 ### One-time setup
 
@@ -150,7 +158,7 @@ Every push to `main` runs [`.github/workflows/deploy.yml`](.github/workflows/dep
 3. **Databases.** Create three MySQL databases (content, admin, analytics), each with its own user. Keep the host, names, users and passwords for step 7.
 4. **FTP account for GitHub.** Create a dedicated FTP account whose home is the hosting root, so it can be revoked without touching yours.
 5. **GitHub secrets.** In the repository, *Settings › Secrets and variables › Actions*, add `FTP_SERV` (the LWS FTP server address), `ID` (the FTP username) and `PASSWORD`.
-6. **First deploy.** Push to `main` (or run the workflow by hand from the Actions tab). The first upload is slow: `vendor` holds thousands of files. The workflow uses explicit FTP over TLS; if LWS refuses it, change `protocol: ftps` to `ftp` in the workflow.
+6. **First deploy.** Push to `main` (or run the workflow by hand from the Actions tab). It goes up as one archive and replaces everything in the hosting space (see above), so SSL must already be on for the domain. The workflow uses explicit FTP over TLS; if LWS refuses it, change `protocol: ftps` to `ftp` in the workflow and remove `--ssl-reqd` in `scripts/first-deploy.sh`.
 7. **Installer.** Open the LWS file manager, open `openrevise-core/storage/install-key.txt` and copy the key. Then go to <https://openrevise.com/install.php> and follow the steps: install key, requirements check, site details, the three databases (each connection is tested), the admin account. It writes `openrevise-core/.env`, creates the tables, optionally adds the launch boards and subjects, creates the admin, and locks itself.
 8. **Cron.** In the LWS panel, add a daily cron job: `php /path/to/openrevise-core/artisan openrevise:analytics-rollup`. Without it, the dashboard catches up by itself when you open it.
 9. **Admin.** Sign in at <https://admin.openrevise.com>. In *Settings*, add a passkey (you get ten one-time recovery codes; keep them safe). In *API keys*, make a key for Claude and give it the API reference at <https://api.openrevise.com>.
