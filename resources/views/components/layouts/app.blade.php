@@ -21,6 +21,10 @@
 <body x-data data-page="{{ $page }}" @if ($subject) data-subject="{{ $subject->slug }}" @endif @if ($board) data-board="{{ $board }}" @endif @if ($lesson) data-lesson="{{ $lesson }}" @endif>
     <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 btn">Skip to content</a>
 
+    @if ($announcement = \App\Models\Admin\Setting::get('announcement'))
+        <div class="bg-brand-dark text-white text-center text-sm px-4 py-2">{{ $announcement }}</div>
+    @endif
+
     <header class="topbar">
         <div class="h-full flex items-center gap-2 px-3 lg:px-0">
             <button type="button" class="icon-btn lg:hidden" @click="$store.ui.menu = !$store.ui.menu" :aria-expanded="$store.ui.menu" aria-controls="sidebar" aria-label="Menu">

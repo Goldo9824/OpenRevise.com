@@ -19,7 +19,7 @@
 <meta name="theme-color" content="#ffffff">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 @vite(['resources/css/site.css', 'resources/js/site.js'])
-@if (config('openrevise.analytics.enabled'))
+@if (config('openrevise.analytics.enabled') && \App\Models\Admin\Setting::get('analytics', '1') === '1')
     @vite('resources/js/tracker.js')
 @endif
 @foreach (array_filter($jsonLd) as $schema)

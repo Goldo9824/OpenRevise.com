@@ -41,7 +41,10 @@ return Application::configure(basePath: dirname(__DIR__))
                 ))->where('any', '.*');
             });
 
-            // The admin panel registers its own routes (Filament), on its domain.
+            // The admin panel (Filament) registers its own pages on its domain.
+            Route::domain($domains['admin'])
+                ->middleware('web')
+                ->group(base_path('routes/admin.php'));
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
@@ -58,6 +61,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'api.key' => AuthenticateApiKey::class,
         ]);
+
+        $middleware->redirectGuestsTo(fn () => route('filament.admin.auth.login'));
 
         // LWS sits behind a proxy for HTTPS.
         $middleware->trustProxies(at: '*');
