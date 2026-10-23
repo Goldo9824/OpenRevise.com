@@ -1,0 +1,11 @@
+<?php
+
+namespace App\Filament\Resources\ApiRequestResource\Pages;
+
+use App\Filament\Resources\ApiRequestResource;
+use Filament\Resources\Pages\ListRecords;
+
+class ListApiRequests extends ListRecords
+{
+    protected static string $resource = ApiRequestResource::class;
+}
