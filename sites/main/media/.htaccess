@@ -1,12 +1,15 @@
 # Uploaded diagrams. Only images are served, never scripts.
+#
+# Only directives LWS allows in .htaccess: it refuses "Options ExecCGI"
+# (and with it every file in this folder, as a 500). Scripts cannot run
+# here because no file whose name has a script extension anywhere in it
+# (x.php, x.php.png, x.phtml...) can be requested at all.
 
-Options -Indexes -ExecCGI
-
-<IfModule mod_php.c>
-    php_flag engine off
+<IfModule mod_negotiation.c>
+    Options -MultiViews -Indexes
 </IfModule>
 
-<FilesMatch "\.(php|phtml|phar|pl|py|cgi|sh|html?)$">
+<FilesMatch "\.(php\d*|pht|phtml|phar|pl|py|cgi|sh|s?html?)(\.|$)">
     <IfModule mod_authz_core.c>
         Require all denied
     </IfModule>
