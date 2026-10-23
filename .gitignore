@@ -32,3 +32,8 @@ Thumbs.db
 /storage/install.lock
 /storage/install-key.txt
 /dist
+
+# Published by "php artisan filament:assets" during the build.
+/public/js/filament
+/public/css/filament
+/public/fonts/filament
