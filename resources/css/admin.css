@@ -99,11 +99,16 @@
 .or-settings {
     display: grid;
     gap: 1.5rem;
+    min-width: 0;
+}
+
+.or-settings > * {
+    min-width: 0;
 }
 
 @media (min-width: 1024px) {
     .or-settings {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     }
 
     .or-settings .wide {

@@ -51,4 +51,9 @@ class Board extends ContentModel
     {
         return static::$slugCache ??= static::query()->pluck('slug');
     }
+
+    public static function flushSlugCache(): void
+    {
+        static::$slugCache = null;
+    }
 }

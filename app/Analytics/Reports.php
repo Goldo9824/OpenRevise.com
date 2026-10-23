@@ -4,6 +4,7 @@ namespace App\Analytics;
 
 use App\Models\Content\Lesson;
 use Carbon\CarbonImmutable;
+use Illuminate\Database\Connection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -41,7 +42,7 @@ class Reports
         app(Rollup::class)->catchUpQuietly();
     }
 
-    protected function db(): \Illuminate\Database\Connection
+    protected function db(): Connection
     {
         return DB::connection('analytics');
     }

@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\App\BrowseController;
-use App\Http\Controllers\App\FallbackController;
 use App\Http\Controllers\App\HomeController;
 use App\Http\Controllers\App\LessonController;
 use App\Http\Controllers\App\MockExamController;
@@ -45,5 +44,3 @@ Route::prefix($level)->group(function () {
     Route::get('{subject}/{topic}/{chapter}/{lesson}', [LessonController::class, 'show']);
     Route::get('{subject}/{topic}/{chapter}/{lesson}/exam-questions', [LessonController::class, 'questions']);
 });
-
-Route::fallback(FallbackController::class);

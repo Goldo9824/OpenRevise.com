@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\Content\Subject;
 use Illuminate\Support\Collection;
 
 class TopSubjects extends RankedList
@@ -15,7 +16,7 @@ class TopSubjects extends RankedList
 
     protected function rows(): Collection
     {
-        $names = \App\Models\Content\Subject::pluck('name', 'slug');
+        $names = Subject::pluck('name', 'slug');
 
         return $this->reports()->breakdown('subject')->map(fn ($r) => ['label' => $names[$r['label']] ?? $r['label']] + $r);
     }

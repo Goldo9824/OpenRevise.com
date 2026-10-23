@@ -19,18 +19,20 @@
     </source>
     <php>
         <env name="APP_ENV" value="testing"/>
+        <env name="APP_KEY" value="base64:Fq2gu+mF1DYI6Pr4xT8lXQHbWtNEYM1oX7n2YlIM0CA=" force="true"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
         <env name="BROADCAST_CONNECTION" value="null"/>
-        <env name="CACHE_STORE" value="array"/>
-        <env name="DB_CONNECTION" value="sqlite"/>
-        <env name="DB_DATABASE" value=":memory:"/>
-        <env name="DB_URL" value=""/>
+        <env name="CACHE_STORE" value="array" force="true"/>
+        <env name="DB_DRIVER" value="sqlite" force="true"/>
+        <env name="CONTENT_DB_DATABASE" value=":memory:" force="true"/>
+        <env name="ADMIN_DB_DATABASE" value=":memory:" force="true"/>
+        <env name="ANALYTICS_DB_DATABASE" value=":memory:" force="true"/>
+        <env name="OPENREVISE_DOMAIN" value="openrevise.test" force="true"/>
+        <env name="OPENREVISE_SCHEME" value="http" force="true"/>
+        <env name="OPENREVISE_PORT" value="" force="true"/>
         <env name="MAIL_MAILER" value="array"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
-        <env name="SESSION_DRIVER" value="array"/>
-        <env name="PULSE_ENABLED" value="false"/>
-        <env name="TELESCOPE_ENABLED" value="false"/>
-        <env name="NIGHTWATCH_ENABLED" value="false"/>
+        <env name="SESSION_DRIVER" value="array" force="true"/>
     </php>
 </phpunit>

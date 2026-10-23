@@ -8,6 +8,7 @@ use App\Models\Admin\ApiKey;
 use App\Models\Content\Board;
 use App\Models\Content\Status;
 use App\Models\Content\Subject;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -116,7 +117,7 @@ abstract class ApiController extends Controller
     }
 
     /** @param array<string, mixed> $data */
-    protected function respond(array $data, int $status = 200): \Illuminate\Http\JsonResponse
+    protected function respond(array $data, int $status = 200): JsonResponse
     {
         $payload = ['data' => $data];
 

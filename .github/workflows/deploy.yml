@@ -1,0 +1,99 @@
+# Builds OpenRevise on GitHub and uploads it to LWS over FTP.
+# Nothing is built or installed on the server. See README, "Deploying".
+#
+# Repository secrets (Settings > Secrets and variables > Actions):
+#   FTP_SERV   address of the LWS FTP server
+#   ID         FTP username (use a dedicated FTP account for GitHub)
+#   PASSWORD   FTP password
+
+name: Deploy to LWS
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Never run two uploads at once.
+concurrency:
+  group: deploy-lws
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  OPENREVISE_DOMAIN: openrevise.com
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: intl, gd, pdo_mysql, pdo_sqlite, mbstring, zip
+          coverage: none
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: composer install --no-interaction --prefer-dist --no-progress
+      - run: npm ci && npm run build
+      - run: vendor/bin/phpunit
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: intl, gd, pdo_mysql, mbstring, zip
+          coverage: none
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # 1. Build: production PHP packages and the CSS and JavaScript.
+      - name: Install PHP packages (no dev tools)
+        run: composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-progress
+
+      - name: Build CSS and JavaScript
+        run: npm ci && npm run build
+
+      # Filament's scripts and styles for the admin panel. Config is never
+      # cached here: that would bake GitHub's settings into the files.
+      - name: Publish admin panel assets
+        run: php artisan filament:assets
+
+      # 2. Assemble: one folder per site, as LWS serves them.
+      - name: Assemble the hosting layout
+        run: scripts/assemble.sh dist
+
+      # 3. Upload: only changed files after the first run. The .env file, the
+      # storage folder (lesson files) and uploaded diagrams are not in dist/.
+      # The action only ever deletes files it uploaded itself, so it never
+      # touches them on the server.
+      - name: Upload over FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERV }}
+          username: ${{ secrets.ID }}
+          password: ${{ secrets.PASSWORD }}
+          # Explicit FTP over TLS. If LWS refuses it, change to "ftp".
+          protocol: ftps
+          local-dir: ./dist/
+          server-dir: ./
+          exclude: |
+            **/.git*
+            **/.git*/**
+            openrevise-core/.env
+            openrevise-core/storage/**

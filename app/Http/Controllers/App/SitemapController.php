@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\App;
 
 use App\Http\Controllers\Controller;
-use App\Models\Content\Lesson;
 use App\Models\Content\MockExam;
-use App\Models\Content\Status;
 use App\Models\Content\Subject;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;

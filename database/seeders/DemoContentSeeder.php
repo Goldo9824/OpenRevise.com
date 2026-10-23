@@ -108,7 +108,7 @@ TXT,
             ],
             [
                 'type' => 'short-answer',
-                'question' => "Give **two** differences between the genetic material of a prokaryotic cell and that of a eukaryotic cell.",
+                'question' => 'Give **two** differences between the genetic material of a prokaryotic cell and that of a eukaryotic cell.',
                 'marks' => 2,
                 'mark_scheme' => <<<'TXT'
 Any two from:
@@ -191,7 +191,7 @@ TXT,
             'question' => "The image of a cell is 12 mm wide. The real cell is 0.03 mm wide.\n\nCalculate the magnification.",
             'marks' => 2,
             'mark_scheme' => "- \\( \\frac{12}{0.03} \\) (1)\n- ×400 (1)",
-            'model_answer' => "magnification = image size ÷ real size = 12 ÷ 0.03 = **×400**",
+            'model_answer' => 'magnification = image size ÷ real size = 12 ÷ 0.03 = **×400**',
             'position' => 1,
         ]);
 

@@ -21,28 +21,25 @@ class Rollup
         $db = DB::connection('analytics');
         $today = CarbonImmutable::today();
 
-        $first = $db->table('page_views')->where('created_at', '<', $today)->min('created_at');
-        if (! $first) {
-            $this->prune();
-
-            return 0;
-        }
-
+        // Only days that have page views and are not rolled up yet.
         $done = $db->table('daily_totals')->pluck('date')->map(fn ($d) => substr((string) $d, 0, 10))->flip();
-        $day = CarbonImmutable::parse($first)->startOfDay();
-        $rolled = 0;
+        $days = $db->table('page_views')
+            ->where('created_at', '<', $today)
+            ->selectRaw('date(created_at) as day')
+            ->distinct()
+            ->orderBy('day')
+            ->pluck('day')
+            ->map(fn ($d) => substr((string) $d, 0, 10))
+            ->reject(fn ($d) => isset($done[$d]))
+            ->take($maxDays);
 
-        while ($day->lt($today) && $rolled < $maxDays) {
-            if (! isset($done[$day->toDateString()])) {
-                $this->rollDay($day);
-                $rolled++;
-            }
-            $day = $day->addDay();
+        foreach ($days as $day) {
+            $this->rollDay(CarbonImmutable::parse($day));
         }
 
         $this->prune();
 
-        return $rolled;
+        return $days->count();
     }
 
     /** At most once every ten minutes, for the dashboard. */
@@ -101,11 +98,16 @@ class Rollup
     {
         $cutoff = CarbonImmutable::today()->subDays(config('openrevise.analytics.raw_days'));
         $db = DB::connection('analytics');
+        $deleted = 0;
 
-        // Only delete days that are safely rolled up.
-        $rolled = $db->table('daily_totals')->where('date', '<', $cutoff->toDateString())->exists()
-            || ! $db->table('page_views')->where('created_at', '<', $cutoff)->exists();
+        // Only days that are safely rolled up are deleted.
+        $rolled = $db->table('daily_totals')->where('date', '<', $cutoff->toDateString())->pluck('date');
 
-        return $rolled ? $db->table('page_views')->where('created_at', '<', $cutoff)->delete() : 0;
+        foreach ($rolled as $date) {
+            $day = CarbonImmutable::parse(substr((string) $date, 0, 10));
+            $deleted += $db->table('page_views')->where('created_at', '>=', $day)->where('created_at', '<', $day->addDay())->delete();
+        }
+
+        return $deleted;
     }
 }
